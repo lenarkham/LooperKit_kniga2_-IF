@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>如果没有你 · Тренажёр аудирования</title>
+<style>
+  :root{
+    --bg-0:#0a0a0c;
+    --bg-1:#111113;
+    --card:#151517;
+    --card-2:#19191c;
+    --border:rgba(255,255,255,.08);
+    --border-soft:rgba(255,255,255,.05);
+    --text:#eeeef0;
+    --muted:#8d8d93;
+    --muted-2:#6c6c72;
+    --violet:#0284c7;
+    --violet-2:#38bdf8;
+    --pink:#0ea5e9;
+    --blue:#7dd3fc;
+    --grad-brand: linear-gradient(90deg,#075985 0%, #0ea5e9 55%, #38bdf8 100%);
+    --grad-primary: linear-gradient(90deg,#0c4a6e 0%, #0284c7 55%, #22d3ee 100%);
+    --grad-track: linear-gradient(90deg,#38bdf8 0%, #0284c7 100%);
+    --grad-vol: linear-gradient(90deg,#0284c7 0%, #7dd3fc 100%);
+    --danger:#c98a94;
+    --ok:#38bdf8;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    min-height:100vh;
+  }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1100px 500px at 15% -10%, rgba(255,255,255,.05), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(255,255,255,.035), transparent 55%),
+      var(--bg-0);
+    color:var(--text);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    padding:28px 20px 90px;
+  }
+
+  /* ===== Top row ===== */
+  .top-row{
+    display:flex;
+    width:100%;
+    max-width:680px;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:22px;
+    gap:16px;
+  }
+  .brand h1{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:.01em;
+    margin:0 0 4px;
+    background:var(--grad-brand);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .brand .tagline{
+    font-size:13px;
+    color:var(--muted);
+    margin:0;
+  }
+  .book-title{
+    margin:0;
+    max-width:58%;
+    text-align:right;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .nav-small{
+    display:flex;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .nav-small button{
+    padding:9px 16px;
+    font-size:13px;
+    font-weight:600;
+    white-space:nowrap;
+  }
+
+  /* ===== Chapter tabs ===== */
+  .tabs{
+    display:flex;
+    gap:8px;
+    width:100%;
+    max-width:680px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    background:#19191c;
+    color:var(--muted);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 0;
+    width:44px;
+    text-align:center;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn:hover{
+    border-color:var(--border-soft);
+    color:var(--text);
+  }
+  .tab-btn.active{
+    background:#26262a;
+    color:#f0f0f2;
+    border-color:rgba(56,189,248,.24);
+    box-shadow:none;
+  }
+
+  /* ===== Progress label ===== */
+  .progress{
+    font-size:13.5px;
+    color:var(--muted);
+    margin-bottom:14px;
+    text-align:center;
+  }
+
+  /* ===== Sliders ===== */
+  input[type="range"]{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    outline:none;
+    cursor:pointer;
+    background:transparent;
+  }
+  .unit-slider{
+    max-width:680px;
+    height:1px;
+    border-radius:1px;
+    margin-bottom:22px;
+    background:linear-gradient(to right, var(--violet-2) 0%, var(--muted) var(--fill,10%), #232326 var(--fill,10%), #232326 100%);
+  }
+  .unit-slider::-webkit-slider-runnable-track{
+    height:1px;
+    border-radius:1px;
+    background:transparent;
+  }
+  .unit-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    appearance:none;
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(255,255,255,.16), 0 2px 8px rgba(0,0,0,.4);
+    cursor:pointer;
+    margin-top:-6px;
+  }
+  .unit-slider::-moz-range-track{
+    height:1px;
+    border-radius:1px;
+    background:#232326;
+  }
+  .unit-slider::-moz-range-progress{
+    height:1px;
+    border-radius:1px;
+    background:linear-gradient(to right, var(--violet-2) 0%, var(--muted) 100%);
+  }
+  .unit-slider::-moz-range-thumb{
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#fff;
+    border:none;
+    box-shadow:0 0 0 3px rgba(255,255,255,.16);
+    cursor:pointer;
+  }
+
+  #volumeRow{
+    max-width:680px;
+    width:100%;
+    margin:0 auto 26px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  #volumeRow label{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    font-size:0;
+    color:var(--muted);
+  }
+  #volumeRow .icon-speaker,
+  #volumeRow .icon-eq{
+    font-size:15px;
+    color:var(--muted);
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:2px;
+  }
+  #volumeRow .icon-speaker svg{
+    display:block;
+    width:16px;
+    height:16px;
+    color:var(--muted);
+    fill:var(--muted);
+  }
+  .icon-eq{
+    display:flex;
+    align-items:flex-end;
+    gap:2px;
+    height:14px;
+  }
+  .icon-eq span{
+    width:3px;
+    background:var(--muted);
+    border-radius:1px;
+    display:inline-block;
+    animation:eqbounce 1.1s ease-in-out infinite;
+  }
+  .icon-eq span:nth-child(1){height:40%; animation-delay:0s;}
+  .icon-eq span:nth-child(2){height:100%; animation-delay:.15s;}
+  .icon-eq span:nth-child(3){height:65%; animation-delay:.3s;}
+  @keyframes eqbounce{
+    0%,100%{transform:scaleY(.5);}
+    50%{transform:scaleY(1);}
+  }
+  #volumeSlider{
+    flex:1;
+    height:2px;
+    border-radius:1px;
+    background:linear-gradient(to right, var(--muted) 0%, var(--violet) var(--vfill,100%), #232326 var(--vfill,100%), #232326 100%);
+  }
+  #volumeSlider::-webkit-slider-runnable-track{
+    height:2px;
+    border-radius:1px;
+    background:transparent;
+  }
+  #volumeSlider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    appearance:none;
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(56,189,248,.24), 0 2px 8px rgba(0,0,0,.4);
+    cursor:pointer;
+    margin-top:-5.5px;
+  }
+  #volumeSlider::-moz-range-track{
+    height:2px;
+    border-radius:1px;
+    background:#232326;
+  }
+  #volumeSlider::-moz-range-progress{
+    height:2px;
+    border-radius:1px;
+    background:linear-gradient(to right, var(--muted) 0%, var(--violet) 100%);
+  }
+  #volumeSlider::-moz-range-thumb{
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#fff;
+    border:none;
+    box-shadow:0 0 0 3px rgba(56,189,248,.24);
+    cursor:pointer;
+  }
+  #volumeValue{
+    font-size:13.5px;
+    color:var(--text);
+    font-weight:600;
+    flex-shrink:0;
+    min-width:38px;
+    text-align:right;
+  }
+
+  /* ===== Main card ===== */
+  .card{
+    width:100%;
+    max-width:680px;
+    background:linear-gradient(180deg, var(--card-2), var(--card));
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:36px 30px 30px;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.03);
+  }
+
+  .mode-label{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--muted);
+    margin-bottom:14px;
+    min-height:16px;
+  }
+  .mode-label.zh{color:var(--violet-2);}
+  .mode-label.ru{color:var(--muted);}
+
+  .sentence{
+    font-size:30px;
+    line-height:1.55;
+    font-weight:700;
+    color:var(--text);
+    margin:4px 0 6px;
+    min-height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    word-break:break-word;
+  }
+  .sentence.ru-mode{
+    color:#c9c9ce;
+    font-weight:500;
+    font-size:19px;
+  }
+
+  /* ===== Scene: uploaded background photo + waveform ===== */
+  .scene{
+    position:relative;
+    height:170px;
+    margin:10px 0 22px;
+    border-radius:16px;
+    overflow:hidden;
+    background-image:url('data:image/jpeg;base64,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');
+    background-size:cover;
+    background-position:center 62%;
+    background-repeat:no-repeat;
+  }
+  .scene::before{
+    /* darken bottom edge so the waveform stays readable */
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.55) 100%);
+  }
+  .waveform{
+    position:absolute;
+    left:0; right:0; bottom:16px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    gap:4px;
+    height:48px;
+    padding:0 20px;
+  }
+  .bar{
+    width:4px;
+    background:#0c4a6e;
+    border-radius:2px;
+    height:8px;
+    transition:height .12s ease, background .2s ease;
+  }
+  .bar.active{background:var(--violet-2); box-shadow:0 0 8px rgba(56,189,248,.35);}
+  .bar.active.ru{background:#7dd3fc; box-shadow:0 0 8px rgba(255,255,255,.3);}
+
+  .status{
+    font-size:14.5px;
+    color:var(--muted);
+    min-height:20px;
+    margin-bottom:22px;
+  }
+
+  /* ===== Buttons ===== */
+  .controls{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    margin-top:0;
+    flex-wrap:wrap;
+  }
+  .controls + .controls{
+    margin-top:16px;
+  }
+  .controls-playback button{
+    width:min(46%, 220px);
+  }
+  .controls-bookmarks{
+    margin-top:12px !important;
+  }
+  .controls-bookmarks button{
+    padding:9px 13px;
+    font-size:13px;
+  }
+  button{
+    font-family:inherit;
+    font-size:15px;
+    font-weight:600;
+    border:none;
+    border-radius:13px;
+    padding:15px 24px;
+    cursor:pointer;
+    position:relative;
+    transition:transform .08s ease, opacity .2s ease, box-shadow .2s ease;
+  }
+  button:active{transform:scale(.96);}
+  button:disabled{opacity:.35; cursor:default;}
+
+  .pinyin-tip{
+    position:absolute;
+    left:50%;
+    bottom:100%;
+    transform:translate(-50%, 4px);
+    margin-bottom:8px;
+    background:#2a2a2e;
+    color:#f2f2f4;
+    border:1px solid rgba(56,189,248,.24);
+    border-radius:8px;
+    padding:5px 10px;
+    font-size:12px;
+    font-weight:600;
+    text-transform:none;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease;
+  }
+  .pinyin-tip::after{
+    content:"";
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translateX(-50%);
+    border:5px solid transparent;
+    border-top-color:#2a2a2e;
+  }
+  .pinyin-tip.show{
+    opacity:1;
+    transform:translate(-50%, 0);
+  }
+
+  .btn-primary{
+    background:#201f23;
+    color:#f2f2f4;
+    box-shadow:0 10px 26px rgba(0,0,0,.6);
+  }
+  .btn-primary:hover{box-shadow:0 12px 30px rgba(0,0,0,.7);}
+  .btn-secondary{
+    background:#201f23;
+    color:#e4e4e7;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 10px 26px rgba(0,0,0,.6);
+  }
+  .btn-secondary:hover{
+    box-shadow:0 12px 30px rgba(0,0,0,.7);
+  }
+  #pauseBtn{
+    text-transform:uppercase;
+    letter-spacing:.02em;
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--muted);
+    border:1px solid var(--border);
+  }
+  .btn-ghost:hover{
+    color:var(--text);
+    border-color:rgba(56,189,248,.30);
+  }
+
+  #voiceBtn{
+    background:#1c1c20;
+    color:#c8c8ce;
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:6px 14px;
+    font-size:12px;
+    font-weight:600;
+    flex-shrink:0;
+  }
+  #voiceBtn.active{
+    background:rgba(255,255,255,.10);
+    border-color:rgba(255,255,255,.3);
+    color:#eeeef0;
+  }
+
+  .hint-inline{
+    font-size:13px;
+    color:var(--muted-2);
+    margin-top:14px;
+    line-height:1.5;
+  }
+  .bookmark-list{
+    display:none;
+    margin:14px 0 0;
+    padding:10px;
+    text-align:left;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:rgba(255,255,255,.025);
+  }
+  .bookmark-list.open{display:block;}
+  .bookmark-empty{color:var(--muted); font-size:13px; padding:4px;}
+  .bookmark-item{display:flex; gap:8px; align-items:center; margin:6px 0;}
+  .bookmark-jump{flex:1; text-align:left; padding:8px 10px; font-size:13px;}
+  .bookmark-remove{padding:7px 9px; color:var(--muted);}
+  #voiceHeard{
+    color:var(--muted);
+  }
+  #voiceStatus:not(:empty){
+    color:var(--pink);
+  }
+
+  .hint{
+    width:100%;
+    max-width:680px;
+    font-size:12.5px;
+    color:var(--muted-2);
+    margin-top:20px;
+    line-height:1.6;
+    text-align:center;
+    padding:14px 18px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+  }
+
+  select{
+    background:#1c1c20;
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:7px 12px;
+    font-size:13px;
+  }
+  .setting-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:20px;
+    font-size:13.5px;
+    color:var(--muted);
+  }
+
+  .file-warning{
+    max-width:680px;
+    width:100%;
+    background:#2c1520;
+    border:1px solid rgba(240,112,138,.35);
+    color:#ffb4c2;
+    border-radius:12px;
+    font-size:13px;
+    margin:22px auto 0;
+    display:none;
+    cursor:pointer;
+    overflow:hidden;
+    user-select:none;
+  }
+  .file-warning-head{
+    padding:10px 18px;
+    font-size:12.5px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    opacity:0.9;
+  }
+  .file-warning-body{
+    display:none;
+    padding:0 18px 14px;
+    line-height:1.5;
+  }
+  .file-warning.expanded .file-warning-head{
+    white-space:normal;
+  }
+  .file-warning.expanded .file-warning-body{
+    display:block;
+  }
+
+  @media (max-width:480px){
+    .sentence{font-size:24px;}
+    .top-row{flex-direction:row; align-items:flex-start;}
+    .book-title{max-width:62%; font-size:12px;}
+    .tab-btn{width:38px;}
+  }
+</style>
+<body>
+
+<div class="top-row">
+  <div class="brand">
+    <h1>LooperKit</h1>
+  </div>
+  <p class="book-title">如果没有你</p>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="progress" id="progressLabel">Предложение 1 / 41</div>
+<input type="range" class="unit-slider" id="unitSlider" min="1" max="41" value="1" step="1">
+
+<div id="volumeRow">
+  <label for="volumeSlider">
+    <span class="icon-speaker"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5l5 4v-13l-5 4H4z"/><path d="M15.8 8.7a5 5 0 0 1 0 6.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    <input type="range" id="volumeSlider" min="0" max="100" value="100" step="1">
+  </label>
+  <span id="volumeValue">100%</span>
+  <span class="icon-eq"><span></span><span></span><span></span></span>
+</div>
+
+<div class="card">
+  <div class="sentence" id="sentenceText"></div>
+
+  <div class="scene">
+    <div class="waveform" id="waveform"></div>
+  </div>
+
+  <div class="status" id="statusLine">Играет по кругу — нажмите «ДАЛЬШЕ», когда разберёте фразу</div>
+
+  <div class="controls controls-playback">
+    <button class="btn-secondary" id="translateBtn">翻译<span class="pinyin-tip" id="translatePinyin">fānyì</span></button>
+    <button class="btn-primary" id="nextBtn">下</button>
+  </div>
+
+  <div class="controls controls-playback">
+    <button class="btn-secondary" id="pauseBtn"><span id="pauseLabel">暂停</span><span class="pinyin-tip" id="pausePinyin">zàntíng</span></button>
+    <button class="btn-secondary" id="prevBtn" title="Предыдущее предложение">上</button>
+  </div>
+  <div class="controls controls-bookmarks">
+    <button class="btn-ghost" id="bookmarkBtn">Закладка</button>
+    <button class="btn-ghost" id="bookmarksBtn">Закладки</button>
+  </div>
+  <div class="bookmark-list" id="bookmarkList"></div>
+  <div class="setting-row">
+    <label for="speedSelect">Скорость китайского:</label>
+    <select id="speedSelect">
+      <option value="1">1.0×</option>
+      <option value="0.85">0.85×</option>
+      <option value="0.75">0.75×</option>
+      <option value="0.6">0.6×</option>
+    </select>
+    <label for="repeatSelect">Повтор:</label>
+    <select id="repeatSelect" title="Сколько раз проигрывать фразу">
+      <option value="1">1 раз</option>
+      <option value="2">2 раза</option>
+      <option value="3">3 раза</option>
+      <option value="5">5 раз</option>
+      <option value="10">10 раз</option>
+      <option value="Infinity" selected>∞</option>
+    </select>
+  </div>
+</div>
+
+<div class="file-warning" id="fileWarning">
+  <div class="file-warning-head">⚠ Не удаётся загрузить аудио — нажмите для деталей</div>
+  <div class="file-warning-body">
+    Не удаётся загрузить аудиофайлы (<span id="fwFiles"></span>). Убедитесь, что index.html лежит
+    в одной папке с этими файлами (с учётом вложенных папок), и откройте страницу через локальный сервер
+    (например, двойным щелчком, либо через Live Server), если браузер блокирует локальные файлы.
+  </div>
+</div>
+
+<!-- preload вернул на "auto": с "metadata" ломалось повторное воспроизведение
+     перевода (ruAudio) — после первого раза звук пропадал, похоже, локальный
+     сервер не всегда корректно отдаёт повторные Range-запросы при перемотке.
+     Рабочая перемотка важнее экономии памяти. -->
+<audio id="zhAudio" preload="auto"></audio>
+<audio id="ruAudio" preload="auto"></audio>
+
+<script>
+const CH2_UNITS = [{"id": 1, "zhText": "1. 最会打雁的人和最好的头雁", "ruText": "Самый умелый человек в охоте на диких гусей и лучший вожак стаи."}, {"id": 2, "zhText": "那时候,我爷爷是远近有名的打雁人。", "ruText": "В то время мой дедушка был известным в округе охотником на диких гусей."}, {"id": 3, "zhText": "他有一支老枪,这支枪已经跟了他四十年了。", "ruText": "У него было одно старое ружье, это ружье уже 40 лет было с ним."}, {"id": 4, "zhText": "我爷爷打雁，和有的打雁人不一样。", "ruText": "Мой дедушка охотился на диких густей не так, как некоторые другие охотники."}, {"id": 5, "zhText": "有的人远远地看见大雁,就很快地往前跑,", "ruText": "Некоторые люди, издалека увидев диких гусей, сразу быстро бежали вперед."}, {"id": 6, "zhText": "还把枪拿得很高。", "ruText": "Еще и держали ружье очень высоко."}, {"id": 7, "zhText": "没等他们跑近,", "ruText": "Не успев им подбежать близко."}, {"id": 8, "zhText": "更没等他们开枪,哨雁早已经看见他们,看见枪了,", "ruText": "Тем более не успев им выстрелить, гусь-сторож уже давно видел их, видел ружье."}, {"id": 9, "zhText": "所以,有的人打不到雁,", "ruText": "Поэтому некоторые не могли подстрелить ни одного гуся."}, {"id": 10, "zhText": "有的人打到的雁比较少。", "ruText": "А некоторые подстреливали сравнительно мало гусей."}, {"id": 11, "zhText": "我爷爷不这样。我爷爷看见大雁一点都不紧张。", "ruText": "Мой дедушка не был таким. Мой дедушка, увидев диких гусей, совсем не нервничал."}, {"id": 12, "zhText": "他先拿一个大包,把枪包起来。", "ruText": "Сначала он брал большую сумку и заворачивал в нее ружье."}, {"id": 13, "zhText": "哨雁不知道大包里有枪。", "ruText": "Гусь-сторож не знал, что в большой сумке было ружье."}, {"id": 14, "zhText": "爷爷的眼睛看着别的地方,", "ruText": "Глаза дедушки смотрели в другое место."}, {"id": 15, "zhText": "就好像没有看着大雁。", "ruText": "Как будто он не смотрел на диких гусей."}, {"id": 16, "zhText": "他很慢地走,往前走,再很慢地拿枪。", "ruText": "Он очень медленно шел, шел вперед, а потом очень медленно доставал ружье."}, {"id": 17, "zhText": "我爷爷每次打雁,只放一枪。", "ruText": "Каждый раз, когда мой дедушка охотился на гусей, он делал только один выстрел."}, {"id": 18, "zhText": "我爷爷的枪是村子里最好的枪。", "ruText": "Ружье моего дедушки было лучшим ружьем в деревне."}, {"id": 19, "zhText": "这支枪一次可以打一发大子弹。", "ruText": "Из этого ружья за один раз можно было выстрелить одним большим патроном."}, {"id": 20, "zhText": "这发大子弹里有很多很多小子弹。", "ruText": "В этом большом патроне было очень-очень много маленьких пуль."}, {"id": 21, "zhText": "大子弹从枪里打出去,小子弹也就飞出来了,", "ruText": "Когда большой патрон вылетал из ружья, маленькие пули тоже вылетали."}, {"id": 22, "zhText": "能往前面和左右飞很远。", "ruText": "И могли лететь далеко вперед, влево и вправо."}, {"id": 23, "zhText": "所以,我爷爷一枪就能打到七八只雁,", "ruText": "Поэтому мой дедушка одним выстрелом мог подстрелить 7-8 гусей."}, {"id": 24, "zhText": "最多的一次打了十一只呢。", "ruText": "А больше всего за один раз подстрелил целых 11."}, {"id": 25, "zhText": "爷爷的枪打得好极了,也快极了。", "ruText": "Дедушке на ружье стреляло чрезвычайно хорошо и чрезвычайно быстро."}, {"id": 26, "zhText": "常常是爷爷已经打出了子弹,", "ruText": "Часто бывало так, что дедушка уже выпускал пулю."}, {"id": 27, "zhText": "哨雁才知道他是来打雁的。", "ruText": "А гусь-сторож только тогда понимал, что он пришел охотиться на гусей."}, {"id": 28, "zhText": "刚打算叫大家快一点飞走,", "ruText": "Только собирался крикнуть всем, чтобы они побыстрее улетали."}, {"id": 29, "zhText": "可是已经太晚了。", "ruText": "Но уже было слишком поздно."}, {"id": 30, "zhText": "所以,每年一到了十月,天气开始冷了,", "ruText": "Поэтому каждый год Как только наступало октябрь и погода начинала холодать."}, {"id": 31, "zhText": "大雁从北边过来的时候,", "ruText": "Когда дикие гуси прилетали с севера."}, {"id": 32, "zhText": "我爷爷一天就能打到不少雁。", "ruText": "Мой дедушка за один день мог подстрелить немало гусей."}, {"id": 33, "zhText": "我爷爷打了雁,就坐上公共汽车,", "ruText": "Когда мой дедушка подстреливал гусей, он садился на автобус."}, {"id": 34, "zhText": "把打死的雁拿到很远的城市里卖。", "ruText": "Брал убитых гусей и вез их продавать в очень далекий город."}, {"id": 35, "zhText": "对我们这个家家都没有多少钱,", "ruText": "Для нашей деревни где ни у одной семьи не было много денег."}, {"id": 36, "zhText": "家家房子都很旧的小村子来说,", "ruText": "И у каждой семьи дома были очень старые."}, {"id": 37, "zhText": "这些大雁能卖不少钱。", "ruText": "Эти дикие гуси могли продаваться за немалые деньги."}, {"id": 38, "zhText": "爷爷把卖雁的钱放进银行,", "ruText": "Дедушка клал деньги от продажи гусей в банк."}, {"id": 39, "zhText": "等到我和哥哥姐姐的学校跟学生家里要钱的时候,", "ruText": "А когда школа, где учились я и мои старшие братья и сестры, просила деньги у семей учеников."}, {"id": 40, "zhText": "爷爷就让我和哥哥姐姐把这些钱给学校。", "ruText": "Дедушка заставлял меня и моих старших братьев и сестер отдавать эти деньги школе."}, {"id": 41, "zhText": "一些学生家里打不到雁,", "ruText": "Некоторые семьи учеников не могли подстрелить гусей."}, {"id": 42, "zhText": "家里的钱就不够给学校。", "ruText": "И тогда денег в семье не хватало, чтобы отдать школе."}, {"id": 43, "zhText": "有时候,爷爷卖完大雁,", "ruText": "Иногда, после того, как дедушка продавал диких гусей."}, {"id": 44, "zhText": "看着手里的钱一高兴,会给我带回一点水果和别的吃的东西。", "ruText": "Увидев деньги в своих руках и обрадовавшись, он приносил мне немного фруктов и другой еды."}, {"id": 45, "zhText": "虽然只有一点儿,但是这些很少能吃到的东西,", "ruText": "Хотя этого было совсем немного, Но эти вещи, которые очень редко удавалось есть,"}, {"id": 46, "zhText": "会让我这个村子里的孩子高兴好长时间。", "ruText": "заставляли такого деревенского ребенка, как я, радоваться очень долго."}, {"id": 47, "zhText": "有一次,爷爷还用两块五毛钱给我买了一个旧足球呢。", "ruText": "Однажды дедушка еще за 2 юаня 5 маа купил мне старый футбольный мяч."}, {"id": 48, "zhText": "我真想告诉爷爷,我更想要的是一个篮球。", "ruText": "Мне очень хотелось сказать дедушке, что больше всего я хотел баскетбольный мяч."}, {"id": 49, "zhText": "我知道,在我们家,爷爷最喜欢的人就是我。", "ruText": "Я знал, что в нашей семье дедушка больше всего любит именно меня."}, {"id": 50, "zhText": "只要我说要,爷爷一定给我买。", "ruText": "Стоило мне только сказать, что я хочу, дедушка обязательно купил бы мне."}, {"id": 51, "zhText": "可是,我没说。", "ruText": "Но я не сказал."}, {"id": 52, "zhText": "我从小就懂,我们家里人多,钱少,", "ruText": "Я с детства понимал. В нашей семье много людей, мало денег."}, {"id": 53, "zhText": "我和哥哥姐姐还要上学。", "ruText": "А мне и моим старшим братьям и сестрам еще нужно было ходить в школу."}, {"id": 54, "zhText": "有时候,大雁卖得特别好,", "ruText": "Иногда дикие гуси продавались особенно хорошо."}, {"id": 55, "zhText": "爷爷一高兴,也会拿出一两块钱,", "ruText": "И дедушка, обрадовавшись, тоже доставал 1-2 юаня."}, {"id": 56, "zhText": "给自己买点儿不贵的酒喝。", "ruText": "Чтобы купить себе немного недорогого вина."}, {"id": 57, "zhText": "爷爷一喝酒,脸就红红的。", "ruText": "Как только дедушка выпивал, лицо у него становилось красным-красным."}, {"id": 58, "zhText": "所以,每年冬天快要来的时候,", "ruText": "Поэтому каждый год Когда Зима уже почти наступала,"}, {"id": 59, "zhText": "村子里的人只要看见爷爷带着他的枪往村子的西边走,", "ruText": "Если люди в деревне видели, как дедушка со своим ружьем идет на запад деревни."}, {"id": 60, "zhText": "就会半开玩笑地说,", "ruText": "Они наполовину в шутку говорили."}, {"id": 61, "zhText": "好啊,明天又有钱买酒喝了。", "ruText": "Хорошо же, завтра опять будут деньги купить вина выпить."}, {"id": 62, "zhText": "我八岁那年,爷爷就让我跟着他去学习打雁。", "ruText": "Когда мне было восемь лет, дедушка уже позволил мне ходить за ним и учиться охотиться на диких гусей."}, {"id": 63, "zhText": "我真是高兴极了,", "ruText": "Я был прямо чрезвычайно рад."}, {"id": 64, "zhText": "真希望有一天能有一支自己的枪。", "ruText": "И очень надеялся, что однажды у меня будет свое собственное ружье."}, {"id": 65, "zhText": "可是,在我十二岁那年,出了一件事。", "ruText": "Но в тот год, когда мне было 12 лет, произошел один случай."}, {"id": 66, "zhText": "那年,从北边来的雁队里,", "ruText": "В тот год, среди стаи гусей, прилетевшей с севера."}, {"id": 67, "zhText": "有了一只新的头雁。", "ruText": "Появился новый вожак."}, {"id": 68, "zhText": "它又高大又漂亮,", "ruText": "Он был и высокий, и крупный, и красивый."}, {"id": 69, "zhText": "脖子很长,羽毛非常干净,", "ruText": "Шея у него была очень длинная. перья, очень чистые."}, {"id": 70, "zhText": "大雁都很听它的话。", "ruText": "Все дикие гуси очень слушались его."}, {"id": 71, "zhText": "爷爷第一次看见它,就对我说,", "ruText": "Как только дедушка впервые увидел его, он сказал мне."}, {"id": 72, "zhText": "孩子,看见那只头雁了吗?", "ruText": "Мальчик, видишь того вожака."}, {"id": 73, "zhText": "它今年第一次做头雁,", "ruText": "В этом году он впервые стал вожаком."}, {"id": 74, "zhText": "那是只多好的大雁啊!", "ruText": "Да чего же это хороший дикий гусь."}, {"id": 75, "zhText": "它的翅膀那么大,飞得一定很快,", "ruText": "У него такие большие крылья, он наверняка летает очень быстро."}, {"id": 76, "zhText": "它的脖子那么长,眼睛也很好,", "ruText": "У него такая длинная шея, И глаза тоже очень хорошие."}, {"id": 77, "zhText": "一定可以看很远,", "ruText": "он наверняка может видеть очень далеко."}, {"id": 78, "zhText": "它差不多是我看见过的最好的大雁。", "ruText": "он почти самый лучший дикий гусь, которого я когда-либо видел."}, {"id": 79, "zhText": "不知道为什么,", "ruText": "не знаю почему."}, {"id": 80, "zhText": "我觉得爷爷说这些话的时候,", "ruText": "мне казалось, что когда дедушка говорил эти слова."}, {"id": 81, "zhText": "好像有点紧张。", "ruText": "он как будто немного нервничал."}];
+
+const CH3_UNITS = [{"id": 1, "zhText": "三、两个死对头。", "ruText": "Два заклятых врага."}, {"id": 2, "zhText": "过了不长时间", "ruText": "Прошло немного времени."}, {"id": 3, "zhText": "我就知道我那打雁远近有名的爷爷", "ruText": "Я тогда понял, что мой дедушка известный далеко и близко своей охотой на гусей."}, {"id": 4, "zhText": "为什么在看见这只头雁以后有点儿紧张了。", "ruText": "Почему после того, как увидел этого вожака гусей, немного занервничал?"}, {"id": 5, "zhText": "这天晚上十一点多,天黑极了,", "ruText": "В этот вечер было больше 11 часов, было очень темно."}, {"id": 6, "zhText": "应该是大雁睡觉的时候了。", "ruText": "Должно быть, уже было время большим гусям спать."}, {"id": 7, "zhText": "我和爷爷像以前一样,把枪包在一个很旧的大包里,", "ruText": "Мы с дедушкой, как и раньше, завернули ружье в одну очень старую большую сумку."}, {"id": 8, "zhText": "慢慢地往……", "ruText": "Медленно пошли в сторону."}, {"id": 9, "zhText": "村子西边的湿地走。", "ruText": "Заболоченных мест к западу от деревни."}, {"id": 10, "zhText": "前面已经可以看见那些把头放在翅膀下睡觉的大雁了。", "ruText": "Впереди уже можно было увидеть тех больших гусей, которые спали, положив головы под крылья."}, {"id": 11, "zhText": "大雁真多啊!", "ruText": "Больших гусей действительно много."}, {"id": 12, "zhText": "爷爷高兴起来,找到一个合适的地方。", "ruText": "Дедушка обрадовался и нашел подходящее место."}, {"id": 13, "zhText": "慢慢地去包里拿那只黑黑的老枪。", "ruText": "Медленно стал доставать из сумки то старое черное ружье."}, {"id": 14, "zhText": "我知道,过一会儿,那只枪就会笑起来。", "ruText": "Я знал, что через некоторое время это ружье засмеется."}, {"id": 15, "zhText": "枪一笑,很多大雁就要死了。", "ruText": "Как только ружье засмеется, много больших гусей должно будет умереть."}, {"id": 16, "zhText": "可是没想到,", "ruText": "Но неожиданно."}, {"id": 17, "zhText": "爷爷刚拿出枪,那只头雁就一下大叫起来。", "ruText": "Дедушка только достал ружье, как тот вожак гусей сразу громко закричал."}, {"id": 18, "zhText": "我这才知道,除了少雁,头雁也没有睡觉。", "ruText": "Только тогда я узнал, что кроме молодых гусей вожак тоже не спал."}, {"id": 19, "zhText": "它站在一个很高的地方,", "ruText": "Он стоял в очень высоком месте."}, {"id": 20, "zhText": "很容易看见爷爷做的事。", "ruText": "И ему было очень легко видеть то, что делает дедушка."}, {"id": 21, "zhText": "大雁飞得太快了,一下就离我们很远了。", "ruText": "Большие гуси летели слишком быстро и сразу оказались далеко от нас."}, {"id": 22, "zhText": "爷爷没办法打到雁。", "ruText": "Дедушка не мог попасть в гуся."}, {"id": 23, "zhText": "到明天,你看着吧。", "ruText": "До завтра, вот увидишь."}, {"id": 24, "zhText": "爷爷对那只因为飞得高,离得远,", "ruText": "Дедушка той, которая из-за того, что летела высоко и находилась далеко."}, {"id": 25, "zhText": "所以看起来已经很小的头雁说,", "ruText": "Поэтому казалась уже очень маленькой, вожаку гусей сказал."}, {"id": 26, "zhText": "然后很不高兴地带着我回了家。", "ruText": "А затем очень недовольный повел меня домой."}, {"id": 27, "zhText": "四十年来,", "ruText": "За 40 лет."}, {"id": 28, "zhText": "这是爷爷的老枪第一次没有笑出来。", "ruText": "Это был первый раз, когда старое ружье дедушки не засмеялось."}, {"id": 29, "zhText": "爷爷第一次没有打到雁", "ruText": "Дедушка впервые не попал в гуся."}, {"id": 30, "zhText": "第二天,爷爷换了个办法。", "ruText": "На следующий день дедушка сменил способ."}, {"id": 31, "zhText": "就在那个旧包里。", "ruText": "Именно в той старой сумке."}, {"id": 32, "zhText": "晚上,看看时间不早了。", "ruText": "Вечером, посмотрев, что время уже позднее."}, {"id": 33, "zhText": "爷爷叫上我,一起慢慢走进湿地。", "ruText": "Дедушка позвал меня, и мы вместе медленно вошли в заболоченное место."}, {"id": 34, "zhText": "头雁还是没有睡觉,", "ruText": "Вожак гусей все еще не спал."}, {"id": 35, "zhText": "还是站在那个很高的地方。", "ruText": "Все еще стоял в том очень высоком месте."}, {"id": 36, "zhText": "眼睛往东看看,往西看看,", "ruText": "Глазами посмотрел на восток, посмотрел на запад."}, {"id": 37, "zhText": "往南看看,往北看看。", "ruText": "Посмотрел на юг, посмотрел на север."}, {"id": 38, "zhText": "我想,他可能就是在等着我们。", "ruText": "Я подумал, возможно, он именно нас и ждал."}, {"id": 39, "zhText": "爷爷不去看他,慢慢地站下,", "ruText": "Дедушка не стал смотреть на него, медленно остановился."}, {"id": 40, "zhText": "放好自行车。", "ruText": "Поставил велосипед."}, {"id": 41, "zhText": "接着,慢慢地坐下。", "ruText": "Затем медленно сел."}, {"id": 42, "zhText": "然后,慢慢地拿那个旧包。", "ruText": "Потом медленно взял ту старую сумку."}, {"id": 43, "zhText": "看见爷爷拿旧包,", "ruText": "Увидев, что дедушка взял старую сумку."}, {"id": 44, "zhText": "头雁的眼睛好像更大了,", "ruText": "Глаза вожака гусей словно стали еще больше."}, {"id": 45, "zhText": "翅膀也像要飞一样。", "ruText": "И крылья тоже словно собирались взлететь."}, {"id": 46, "zhText": "可是,爷爷拿出一瓶水,", "ruText": "Но дедушка достал бутылку воды."}, {"id": 47, "zhText": "慢慢地坐下。 慢慢喝起来。", "ruText": "Медленно сел. Медленно начал пить."}, {"id": 48, "zhText": "头雁一看,放下了翅膀。", "ruText": "Вожак гусей, увидев это, опустил крылья."}, {"id": 49, "zhText": "就在这时候,爷爷飞一样地拿出了枪。", "ruText": "Именно в этот момент дедушка, словно летя, достал ружье."}, {"id": 50, "zhText": "还是晚了,头雁没有给爷爷机会。", "ruText": "Все равно было поздно, вожак гусей не дал дедушке возможности."}, {"id": 51, "zhText": "就在爷爷刚去拿枪的时候,", "ruText": "Как раз когда дедушка только потянулся взять ружье."}, {"id": 52, "zhText": "头雁已经大叫起来。", "ruText": "Вожак гусей уже громко закричал."}, {"id": 53, "zhText": "这只头雁真是我的死对头,", "ruText": "Этот вожак гусей действительно мой заклятый враг."}, {"id": 54, "zhText": "我一定要打到它。", "ruText": "Я обязательно должен попасть в него."}, {"id": 55, "zhText": "爷爷收拾着那个旧包,", "ruText": "Дедушка, собирай эту старую сумку."}, {"id": 56, "zhText": "特别不高兴地说。", "ruText": "Сказал очень недовольно."}];
+
+const CH10_UNITS = [{"id": 1, "zhText": "头雁又飞起来了。", "ruText": "Вожак гусей снова полетел"}, {"id": 2, "zhText": "时间过得飞一样快。", "ruText": "Время проходит так же быстро, как летит"}, {"id": 3, "zhText": "春天来了，天气暖和了。", "ruText": "Пришла весна, погода потеплела"}, {"id": 4, "zhText": "大雁又开始往北边飞去。", "ruText": "Гуси снова начали лететь на север"}, {"id": 5, "zhText": "头雁小白常常看着天上飞过的雁队想事儿。", "ruText": "Вожак Сеабай часто смотрит на пролетающую в небе стаю гусей и думает о разных вещах"}, {"id": 6, "zhText": "黑黑的眼睛很大很大。", "ruText": "Черные-черные глаза, очень-очень большие"}, {"id": 7, "zhText": "我知道，小白、小黄是大雁。", "ruText": "Я знаю, Сеабай и Сеахуан, гуси"}, {"id": 8, "zhText": "大雁应该在天上飞。", "ruText": "Гуси должны летать в небе"}, {"id": 9, "zhText": "特别是小白，", "ruText": "Особенно Сеабай"}, {"id": 10, "zhText": "它是头雁，是只最好的头雁。", "ruText": "Он, вожак, он самый лучший вожак"}, {"id": 11, "zhText": "它怎么能不想飞呢？", "ruText": "Как же, он может не хотеть летать"}, {"id": 12, "zhText": "所以，我打算帮小白飞起来。", "ruText": "Поэтому я решил помочь Сиобаю снова полететь"}, {"id": 13, "zhText": "小白的翅膀伤得很重，羽毛掉了很多。", "ruText": "Крыло Сиобая было сильно повреждено, много перьев выпало"}, {"id": 14, "zhText": "现在刚刚开始长出很短的新羽毛。", "ruText": "Теперь только-только начали вырастать очень короткие новые перья"}, {"id": 15, "zhText": "为让小白早一点儿飞起来，", "ruText": "Чтобы Сиобай немного раньше снова смог полететь"}, {"id": 16, "zhText": "我先让它站在一张桌子上往下飞。", "ruText": "Я сначала заставил его встать на стол и лететь вниз"}, {"id": 17, "zhText": "哪知道，因为翅膀坏了，运动得少，", "ruText": "Кто бы мог знать, что из-за поврежденного крыла, поскольку он мало двигался"}, {"id": 18, "zhText": "小白一飞就掉下来。", "ruText": "Сиабай, как только полетит, сразу падает вниз"}, {"id": 19, "zhText": "可是它一点儿都不怕疼，不怕难。", "ruText": "Но он нисколько не боится боли и не боится трудностей"}, {"id": 20, "zhText": "我把它放到那张桌子上，想让它休息一会儿，", "ruText": "Я ставил его на тот стол, хотел дать ему немного отдохнуть"}, {"id": 21, "zhText": "可它马上又往下飞！", "ruText": "Но он сразу же снова летел вниз"}, {"id": 22, "zhText": "飞了一个多月，", "ruText": "Пролетав больше месяца"}, {"id": 23, "zhText": "不知道多少次，", "ruText": "Неизвестно сколько раз"}, {"id": 24, "zhText": "小白飞好了。", "ruText": "Сиабай снова хорошо полетел"}, {"id": 25, "zhText": "我又让它站在我家的房子上往下飞。", "ruText": "Я снова заставил его встать на доме у меня дома и лететь вниз"}, {"id": 26, "zhText": "飞了两个多月，", "ruText": "Пролетав больше двух месяцев"}, {"id": 27, "zhText": "小白又飞好了。", "ruText": "Сиабай снова стал хорошо летать"}, {"id": 28, "zhText": "不久，夏天到了，", "ruText": "Вскоре пришло лето"}, {"id": 29, "zhText": "几门课都考试完了。", "ruText": "Экзамены по нескольким предметам закончились"}, {"id": 30, "zhText": "放暑假后，", "ruText": "После начала летних каникул"}, {"id": 31, "zhText": "学校没有老师和同学，", "ruText": "В школе не было учителей и одноклассников"}, {"id": 32, "zhText": "我就让小白站在学校的小楼上往下飞……", "ruText": "Я тогда заставил Сиабая встать на маленьком здании школы и лететь вниз"}, {"id": 33, "zhText": "虽然天气很热，", "ruText": "Хотя погода была очень журкой"}, {"id": 34, "zhText": "但是小白一点儿都不怕。", "ruText": "Но Сиабай нисколько не боялся"}, {"id": 35, "zhText": "一天一天，", "ruText": "День за днем"}, {"id": 36, "zhText": "小白的翅膀已经长出了长长的羽毛，", "ruText": "На крыльях Сиабая уже выросли длинные перья"}, {"id": 37, "zhText": "现在，它已经飞得很好了。", "ruText": "Теперь он уже очень хорошо летает"}, {"id": 38, "zhText": "从小白能飞高飞远开始，", "ruText": "С того времени, как Сиабай смог летать высоко и далеко"}, {"id": 39, "zhText": "每天早上，小白都和小黄一起，飞到村子西边的湿地里或者北边的大山里去。", "ruText": "Каждое утро Сиабай вместе с Сиахуанем летит на заболоченные земли к западу от деревни или в большие горы на севере"}, {"id": 40, "zhText": "虽然飞得很远，", "ruText": "Хотя они улетают очень далеко"}, {"id": 41, "zhText": "但是只要我站在房子上大叫：“小白———，小黄———”", "ruText": "Но стоит мне только встать на доме и громко крикнуть «Сиабай! Сиахуан!»"}, {"id": 42, "zhText": "小白、小黄就一定马上飞回来。", "ruText": "Сиабай и Сиахуан обязательно сразу прилетают обратно"}, {"id": 43, "zhText": "这两只大雁知道我在叫谁。", "ruText": "Эти два гуся знают, кого я зову"}, {"id": 44, "zhText": "又到十月了，天气开始冷了，", "ruText": "Снова наступил октябрь, погода начала холодать"}, {"id": 45, "zhText": "我有点儿紧张，", "ruText": "Я немного нервничал"}, {"id": 46, "zhText": "我也说不出我紧张什么。", "ruText": "Я и сам не мог сказать, из-за чего я нервничаю"}, {"id": 47, "zhText": "我真的想让小白、小黄回到雁队里去，", "ruText": "Я действительно хотел, чтобы Сиабай и Сиахуан вернулись в стаю гусей"}, {"id": 48, "zhText": "回到天上，像以前一样，", "ruText": "Вернулись в небо, как раньше"}, {"id": 49, "zhText": "每年都到远远的地方去旅行，", "ruText": "Каждый год отправлялись путешествовать в далекие-далекие места"}, {"id": 50, "zhText": "飞过世界上很多城市、村子，", "ruText": "Пролетали над множеством городов и деревень по всему миру"}, {"id": 51, "zhText": "看很多机场和大飞机、大火车，", "ruText": "Видели много аэропортов, больших самолетов, больших поездов"}, {"id": 52, "zhText": "还有很多我没有见过的新东西。", "ruText": "АРА также много нового, чего я еще не видел"}, {"id": 53, "zhText": "可是，我又非常怕，", "ruText": "Но я также очень боялся"}, {"id": 54, "zhText": "怕以后再也不能和小白、小黄见面……", "ruText": "Боялся, что потом больше никогда не смогу встретиться с Сиабаем и Сиахуанем"}, {"id": 55, "zhText": "那几天，", "ruText": "Вольт те дни"}, {"id": 56, "zhText": "一看见天上飞着“一”字队、“人”字队的大雁，", "ruText": "Как только я видел в небе летящих гусей строем в виде, или строем в виде"}, {"id": 57, "zhText": "一听到大雁叫，", "ruText": "Как только слышал крики гусей"}, {"id": 58, "zhText": "我就紧张……", "ruText": "Я сразу начинал нервничать"}, {"id": 59, "zhText": "有一天，一队大雁飞到了村子西边的湿地休息，", "ruText": "Однажды стая гусей прилетела отдохнуть на заболоченные земли к западу от деревни"}, {"id": 60, "zhText": "爷爷把我叫过来，慢慢地说：", "ruText": "Дедушка позвал меня и медленно сказал"}, {"id": 61, "zhText": "“孩子，是让小白、小黄回到雁队的时候了。”", "ruText": "«Дитя, пришло время позволить Сиабаю и Сиахуаню вернуться в стаю гусей»"}, {"id": 62, "zhText": "我知道，我最怕的事来了。", "ruText": "Я знал: случилось то, чего я больше всего боялся"}, {"id": 63, "zhText": "我的眼睛里一下有了泪，", "ruText": "Вольта в моих глазах вдруг появились слезы"}, {"id": 64, "zhText": "很多的泪。", "ruText": "Очень много слез"}];
+
+const CH4_UNITS = [{"id": 1, "zhText": "四. 爷爷想出了一个很黑的办法。", "ruText": "Четвертое. Дедушка придумал очень черный, коварный способ."}, {"id": 2, "zhText": "已经是第三天了。", "ruText": "Уже третий день."}, {"id": 3, "zhText": "我知道,如果今天晚上再打不到雁,", "ruText": "Я знаю, если сегодня вечером снова не удастся подстрелить гуся."}, {"id": 4, "zhText": "大雁就要飞往暖和的地方过冬天去了。", "ruText": "Дикие гуси полетят в теплое место зимовать."}, {"id": 5, "zhText": "我问爷爷, \"还有办法吗?\"", "ruText": "Я спросил дедушку, есть еще способ."}, {"id": 6, "zhText": "爷爷笑了笑, \"等着看吧。\"", "ruText": "Дедушка улыбнулся, подожди и посмотри."}, {"id": 7, "zhText": "这天下午,爷爷叫我早早地穿上暖和的衣服。", "ruText": "В этот день после обеда дедушка велел мне пораньше надеть теплую одежду."}, {"id": 8, "zhText": "奶奶和妈妈给我们拿了一些吃的。", "ruText": "Бабушка и мама принесли нам немного еды."}, {"id": 9, "zhText": "爷爷把枪放到他自己的大衣服里,", "ruText": "Дедушка положил ружье в свое большое пальто."}, {"id": 10, "zhText": "又放进去一种非常有用的东西——香。", "ruText": "И еще положил туда одну очень полезную вещь, благовоние."}, {"id": 11, "zhText": "啊,我知道了。", "ruText": "А, я понял."}, {"id": 12, "zhText": "这是爷爷打雁的时候用的最黑的办法。", "ruText": "Это самый «черный» способ, который дедушка использует, когда стреляет гусей."}, {"id": 13, "zhText": "大雁都在远远的地方吃东西、游泳、玩呢。", "ruText": "Дикие гуси все далеко едят, плавают, играют."}, {"id": 14, "zhText": "我们已经找到一个合适的地方,", "ruText": "Мы уже нашли подходящее место."}, {"id": 15, "zhText": "舒舒服服地坐下来。", "ruText": "Удобно сели."}, {"id": 16, "zhText": "这个地方是哨雁可以看见的地方。", "ruText": "Это место, которое сторожевой гусь может увидеть."}, {"id": 17, "zhText": "这次,我们就是要让哨雁看见我们。", "ruText": "На этот раз мы именно хотим, чтобы сторожевой гусь увидел нас."}, {"id": 18, "zhText": "大雁都回来睡觉了,", "ruText": "Все дикие гуси вернулись спать."}, {"id": 19, "zhText": "只有一只哨雁没有睡觉。", "ruText": "Только один сторожевой гусь не спал."}, {"id": 20, "zhText": "那哨雁一会儿走过来看看,", "ruText": "Тот сторожевой гусь то подходил посмотреть."}, {"id": 21, "zhText": "一会儿又走过去看看。", "ruText": "То снова отходил посмотреть."}, {"id": 22, "zhText": "那只头雁看见我们, 也不睡觉了。", "ruText": "Тот вожак гусей увидел нас и тоже перестал спать."}, {"id": 23, "zhText": "要知道,它已经两天没有好好睡觉了啊。", "ruText": "Надо знать, он уже два дня не спал как следует."}, {"id": 24, "zhText": "天已经很黑了,", "ruText": "Небо уже стало очень темным."}, {"id": 25, "zhText": "这天晚上特别冷,", "ruText": "В этот вечер было особенно холодно."}, {"id": 26, "zhText": "可能只有两三度。", "ruText": "Возможно, всего 2-3 градуса."}, {"id": 27, "zhText": "大雁都把头放到翅膀下睡觉了。", "ruText": "Все дикие гуси положили головы под крылья и спали."}, {"id": 28, "zhText": "爷爷从衣服里拿出早已经点着的香,", "ruText": "Дедушка достал из одежды уже давно зажженное благовоние."}, {"id": 29, "zhText": "很快地上下一画,", "ruText": "Быстро провел им вверх-вниз."}, {"id": 30, "zhText": "让哨雁看见,", "ruText": "Чтобы сторожевой гусь увидел."}, {"id": 31, "zhText": "又很快地放回衣服里。", "ruText": "И снова быстро положил обратно в одежду."}, {"id": 32, "zhText": "哨雁看见那点着的红红的香,", "ruText": "Сторожевой гусь увидел то зажженное красное благовоние."}, {"id": 33, "zhText": "觉得有问题,", "ruText": "Почувствовал, что что-то не так."}, {"id": 34, "zhText": "忙大叫起来。", "ruText": "Поспешно громко закричал."}, {"id": 35, "zhText": "很多睡觉的大雁,", "ruText": "Многие спавшие дикие гуси сразу вынули головы из-под крыльев."}, {"id": 36, "zhText": "马上把头从翅膀下拿出来,刚想飞,", "ruText": "Только хотели взлететь."}, {"id": 37, "zhText": "可是看看没有什么事,就非常不高兴,", "ruText": "Но посмотрели и увидели, что ничего не случилось."}, {"id": 38, "zhText": "都用翅膀和嘴去打叫自己起来的哨雁。", "ruText": "И очень рассордились."}, {"id": 39, "zhText": "哨雁觉得很疼,很委屈。", "ruText": "Все стали крыльями и клювами бить сторожевого гуся, который поднял их."}, {"id": 40, "zhText": "现在知道了吧?", "ruText": "Сторожевому гусю было очень больно и очень обидно."}, {"id": 41, "zhText": "为什么我要说爷爷这个办法黑?", "ruText": "Теперь понятно."}, {"id": 42, "zhText": "只要再打几次,", "ruText": "Почему я говорю, что способ дедушки черный."}, {"id": 43, "zhText": "那只哨雁就怕了,", "ruText": "Стоит еще несколько раз так сделать."}, {"id": 44, "zhText": "看见什么都不再叫了,", "ruText": "Тот сторожевой гусь испугается."}, {"id": 45, "zhText": "那时候爷爷的老枪就要笑了。", "ruText": "И чтобы не увидел, больше не будет кричать."}, {"id": 46, "zhText": "谁知道,", "ruText": "Тогда старое ружье дедушки будет смеяться."}, {"id": 47, "zhText": "这时候头雁跑过来,", "ruText": "Кто бы мог подумать, в это время подбежал вожак гусей."}, {"id": 48, "zhText": "不让那些大雁打那只哨雁。", "ruText": "Не позволил тем диким гусям бить того сторожевого гуся."}, {"id": 49, "zhText": "看见头雁这样做,", "ruText": "Увидев, что вожак гусей так делает."}, {"id": 50, "zhText": "爷爷有点不高兴。", "ruText": "Дедушка немного расстроился."}, {"id": 51, "zhText": "大雁又睡觉了,", "ruText": "Дикие гуси снова уснули."}, {"id": 52, "zhText": "爷爷再一次从衣服里拿出那只点着的香,", "ruText": "Дедушка еще раз достал из одежды то зажженное благовоние."}, {"id": 53, "zhText": "让哨雁看见。", "ruText": "Чтобы сторожевой гусь его увидел."}, {"id": 54, "zhText": "那只哨雁又大叫起来,", "ruText": "Тот сторожевой гусь снова громко закричал."}, {"id": 55, "zhText": "别的大雁又都过来打它。", "ruText": "Остальные дикие гуси снова все пришли бить его."}, {"id": 56, "zhText": "头雁再一次帮助它,", "ruText": "Вожак гусей снова помог ему."}, {"id": 57, "zhText": "不让别的大雁打它。", "ruText": "Не позволил другим диким гусям бить его."}, {"id": 58, "zhText": "就这样,一次一次来来回回,", "ruText": "Вот так раз за разом, туда-сюда."}, {"id": 59, "zhText": "一直到早上,", "ruText": "До самого утра."}, {"id": 60, "zhText": "爷爷怎么都没有办法拿出枪来,", "ruText": "Дедушка никак не мог достать ружье."}, {"id": 61, "zhText": "更不要说打雁了。", "ruText": "Не говоря уже о том, чтобы стрелять в гусей."}, {"id": 62, "zhText": "看着头雁带着雁队飞起来,", "ruText": "Глядя, как вожак гусей ведет стаю гусей и взлетает."}, {"id": 63, "zhText": "接着飞往暖和的地方。", "ruText": "Затем летит в теплое место."}, {"id": 64, "zhText": "我那打雁远近有名的爷爷,非常非常地不愉快。", "ruText": "Мой дедушка, известный далеко вокруг своей стрельбой по гусям, был очень-очень недоволен."}];
+
+const CH5_UNITS = [{"id": 1, "zhText": "五、好雁,好雁啊!", "ruText": "5 глават, хороший гусь, хороший гусь."}, {"id": 2, "zhText": "可是,就在雁队飞起来以后, 出事了。", "ruText": "Но, как раз после того, как гусиная стая взлетела, случилась беда."}, {"id": 3, "zhText": "一只很大的鹰飞过来了。", "ruText": "Один очень большой ястреб прилетел."}, {"id": 4, "zhText": "鹰很喜欢吃雁。", "ruText": "Ястреб очень любит есть гусей."}, {"id": 5, "zhText": "它看见了一只小雁,", "ruText": "Он увидел одного маленького гуся."}, {"id": 6, "zhText": "大概觉得是不错的早饭,", "ruText": "Наверное, подумал, что это неплохой завтрак."}, {"id": 7, "zhText": "就很快地往小雁那里飞。", "ruText": "И сразу быстро полетел туда, где маленький гусь."}, {"id": 8, "zhText": "就在鹰快要吃到那只小雁的时候,", "ruText": "Как раз в тот момент, когда ястреб вот-вот должен был съесть того маленького гуся."}, {"id": 9, "zhText": "头雁不知道从什么地方很快地飞过来了,", "ruText": "Вожак гусей неизвестно откуда быстро прилетел."}, {"id": 10, "zhText": "看着那么大的鹰, 头雁一点儿都没怕。", "ruText": "Глядя на такого большого ястреба, вожак гусей ничуть не испугался."}, {"id": 11, "zhText": "它大叫着,", "ruText": "Он громко кричал."}, {"id": 12, "zhText": "用自己的翅膀一下又一下地和鹰打,", "ruText": "Своими крыльями раз за разом дрался с ястребом."}, {"id": 13, "zhText": "那只小雁很快地就飞远了。", "ruText": "Тот маленький гусь быстро улетел далеко."}, {"id": 14, "zhText": "鹰很不高兴。", "ruText": "Ястреб был очень недоволен."}, {"id": 15, "zhText": "现在它一定要吃了这只头雁, 才行。", "ruText": "Теперь он обязательно должен съесть этого вожака гусей, только так, иначе никак."}, {"id": 16, "zhText": "我和爷爷紧张地看着鹰和头雁 在天上来回打。", "ruText": "Я и дедушка напряженно смотрели, как ястреб и вожак гусей дерутся в небе туда-сюда."}, {"id": 17, "zhText": "鹰的翅膀比头雁的长,", "ruText": "Крылья ястреба длиннее, чем у вожака гусей."}, {"id": 18, "zhText": "嘴也比头雁的大。", "ruText": "Клюв тоже больше, чем у вожака гусей."}, {"id": 19, "zhText": "打了一会儿,", "ruText": "Дрались некоторое время."}, {"id": 20, "zhText": "头雁的身体上就有伤了,", "ruText": "На теле вожака гусей уже появились раны."}, {"id": 21, "zhText": "伤得很重, 翅膀上很多羽毛也掉了下来。", "ruText": "Ранен тяжело, на крыльях тоже выпало много перьев."}, {"id": 22, "zhText": "雁队飞远了, 但是头雁已经不行了。", "ruText": "Гусиная стая улетела далеко, но вожак гусей уже совсем плох."}, {"id": 23, "zhText": "看到鹰就要吃到头雁了,", "ruText": "Увидев, что ястреб вот-вот съест вожака гусей."}, {"id": 24, "zhText": "爷爷忙拿出枪,", "ruText": "Дедушка поспешно достал ружье."}, {"id": 25, "zhText": "往远的地方打了一枪。", "ruText": "Выстрелил в дальнюю сторону."}, {"id": 26, "zhText": "鹰怕了, 很快地飞走了,", "ruText": "Ястреб испугался, быстро улетел прочь."}, {"id": 27, "zhText": "头雁从很高的地方掉了下来。", "ruText": "Вожак гусей упал вниз с очень большой высоты."}, {"id": 28, "zhText": "它的头上、脖子上、 翅膀上、肚子上都红了。", "ruText": "У него на голове, на шее, на крыльях, на животе, везде стало красным."}, {"id": 29, "zhText": "它已经站不起来了, 它一定非常疼,", "ruText": "Он уже не мог встать, ему наверняка было очень больно."}, {"id": 30, "zhText": "可是它好像一点儿都不怕。", "ruText": "Но он, казалось, совсем не боялся."}, {"id": 31, "zhText": "它把脖子抬得很高,", "ruText": "Он поднял шею очень высоко."}, {"id": 32, "zhText": "用眼睛看看已经飞得很远的雁队,", "ruText": "Глазами посмотрел на уже улетевшую далеко гусиную стаю."}, {"id": 33, "zhText": "看看飞走的鹰, 然后又看着爷爷,", "ruText": "Посмотрел на улетевшего ястреба, потом снова посмотрел на дедушку."}, {"id": 34, "zhText": "那眼睛里有很多很多没办法说出来的东西。", "ruText": "В тех глазах было очень много того, что невозможно было высказать словами."}, {"id": 35, "zhText": "看着伤得很重的头雁,", "ruText": "Глядя на тяжело раненого вожака гусей."}, {"id": 36, "zhText": "爷爷一字一字清清楚楚地说, 好雁!", "ruText": "Дедушка слово за словом очень отчетливо сказал. Хороший гусь."}, {"id": 37, "zhText": "好雁啊!", "ruText": "Хороший гусь."}, {"id": 38, "zhText": "我们把头雁带回了家。", "ruText": "Мы принесли вожака гусей домой."}, {"id": 39, "zhText": "从这天开始, 爷爷收起了那支老枪,", "ruText": "Начиная с этого дня, дедушка убрал то старое ружье."}, {"id": 40, "zhText": "再也不打雁了。", "ruText": "И больше никогда не охотился на гусей."}];
+
+const CH1_UNITS = [{"id": 1, "zhStart": 3.85, "zhEnd": 11.0, "zhText": "如果没有你", "ruStart": 1.39, "ruEnd": 3.31, "ruText": "Если бы не было тебя"}, {"id": 2, "zhStart": 11.85, "zhEnd": 16.0, "zhText": "1. 黄晓明是个小偷", "ruStart": 4.8, "ruEnd": 6.57, "ruText": "Хуан Сяомин — вор"}, {"id": 3, "zhStart": 16.5, "zhEnd": 22.0, "zhText": "一个钱包把黄晓明带进了一件大事情里。", "ruStart": 8.11, "ruEnd": 11.52, "ruText": "Один кошелёк втянул Хуан Сяомина в серьёзное дело."}, {"id": 4, "zhStart": 22.6, "zhEnd": 26.0, "zhText": "2007年8月29号那天,", "ruStart": 13.19, "ruEnd": 17.67, "ruText": "В тот день, 29 августа 2007 года,"}, {"id": 5, "zhStart": 26.95, "zhEnd": 32.0, "zhText": "黄晓明吃了早饭就来到北京火车站。", "ruStart": 18.72, "ruEnd": 23.39, "ruText": "После завтрака Хуан Сяомин пришёл на Пекинский железнодорожный вокзал."}, {"id": 6, "zhStart": 32.2, "zhEnd": 34.0, "zhText": "他拿着一瓶水,", "ruStart": 24.84, "ruEnd": 27.44, "ruText": "Он держал в руке бутылку воды,"}, {"id": 7, "zhStart": 34.3, "zhEnd": 38.11, "zhText": "在火车站的大门前从东到西,", "ruStart": 29.28, "ruEnd": 32.8, "ruText": "перед главным входом на вокзал ходил с востока на запад,"}, {"id": 8, "zhStart": 38.3, "zhEnd": 42.0, "zhText": "从西到东慢慢地走着。", "ruStart": 34.6, "ruEnd": 38.11, "ruText": "а затем медленно возвращался с запада на восток."}, {"id": 9, "zhStart": 42.45, "zhEnd": 45.0, "zhText": "黄晓明今年16岁,", "ruStart": 39.35, "ruEnd": 42.75, "ruText": "Хуан Сяомину в этом году шестнадцать лет,"}, {"id": 10, "zhStart": 45.37, "zhEnd": 48.28, "zhText": "开始偷东西已经两年了。", "ruStart": 43.59, "ruEnd": 46.69, "ruText": "он начал воровать два года назад."}, {"id": 11, "zhStart": 48.77, "zhEnd": 50.0, "zhText": "他长得很高,", "ruStart": 48.33, "ruEnd": 50.46, "ruText": "Он был очень высоким,"}, {"id": 12, "zhStart": 50.3, "zhEnd": 53.0, "zhText": "穿的衣服也很新。", "ruStart": 52.01, "ruEnd": 55.02, "ruText": "и одежда на нём была совсем новая."}, {"id": 13, "zhStart": 53.0, "zhEnd": 57.0, "zhText": "这个很不错的大男孩看起来很快乐。", "ruStart": 56.38, "ruEnd": 59.76, "ruText": "Этот симпатичный парень выглядел очень счастливым."}, {"id": 14, "zhStart": 57.35, "zhEnd": 59.18, "zhText": "不知道他是小偷的人,", "ruStart": 61.79, "ruEnd": 64.37, "ruText": "Люди, не знавшие, что он вор,"}, {"id": 15, "zhStart": 59.27, "zhEnd": 64.0, "zhText": "一定以为他是在这里等着接什么人。", "ruStart": 66.31, "ruEnd": 69.71, "ruText": "наверняка думали, что он кого-то здесь встречает."}, {"id": 16, "zhStart": 64.4, "zhEnd": 68.51, "zhText": "9点,从北边开来的火车到了。", "ruStart": 71.73, "ruEnd": 74.45, "ruText": "В девять часов прибыл поезд с севера."}, {"id": 17, "zhStart": 68.94, "zhEnd": 71.39, "zhText": "很多到北京旅行的人", "ruStart": 76.27, "ruEnd": 79.33, "ruText": "Многие люди, приехавшие в Пекин,"}, {"id": 18, "zhStart": 71.48, "zhEnd": 76.0, "zhText": "拿着大包小包从火车上走下来。", "ruStart": 81.1, "ruEnd": 84.28, "ruText": "сходили с поезда с большими и маленькими сумками."}, {"id": 19, "zhStart": 76.6, "zhEnd": 79.0, "zhText": "火车站的大门前边,", "ruStart": 86.33, "ruEnd": 88.48, "ruText": "Перед главным входом на вокзал,"}, {"id": 20, "zhStart": 79.0, "zhEnd": 81.45, "zhText": "人一下子多起来。", "ruStart": 90.56, "ruEnd": 92.8, "ruText": "вдруг стало очень много людей."}, {"id": 21, "zhStart": 81.68, "zhEnd": 85.0, "zhText": "黄晓明知道偷东西,", "ruStart": 95.04, "ruEnd": 97.9, "ruText": "Хуан Сяомин знал, что для кражи"}, {"id": 22, "zhStart": 85.1, "zhEnd": 89.0, "zhText": "这个大门前边是个好地方。", "ruStart": 100.03, "ruEnd": 103.35, "ruText": "место перед этим входом подходит как нельзя лучше."}, {"id": 23, "zhStart": 89.3, "zhEnd": 93.0, "zhText": "黄晓明的眼睛跟上了一个男人。", "ruStart": 105.61, "ruEnd": 108.51, "ruText": "Хуан Сяомин приметил одного мужчину."}, {"id": 24, "zhStart": 93.7, "zhEnd": 96.0, "zhText": "这是个四十多岁的人,", "ruStart": 110.76, "ruEnd": 113.32, "ruText": "Это был мужчина лет сорока с лишним,"}, {"id": 25, "zhStart": 96.5, "zhEnd": 98.0, "zhText": "他长得很白,", "ruStart": 115.52, "ruEnd": 118.23, "ruText": "у него была очень светлая кожа,"}, {"id": 26, "zhStart": 98.15, "zhEnd": 100.0, "zhText": "穿着很贵的衣服,", "ruStart": 119.87, "ruEnd": 122.44, "ruText": "на нём была дорогая одежда,"}, {"id": 27, "zhStart": 100.4, "zhEnd": 104.0, "zhText": "还拿着一个很漂亮的大黑包。", "ruStart": 124.54, "ruEnd": 128.18, "ruText": "и в руках он держал красивую большую чёрную сумку."}, {"id": 28, "zhStart": 104.85, "zhEnd": 106.19, "zhText": "看见这个包,", "ruStart": 130.43, "ruEnd": 132.28, "ruText": "Увидев эту сумку,"}, {"id": 29, "zhStart": 106.4, "zhEnd": 110.0, "zhText": "黄晓明的眼睛一下子大了。", "ruStart": 134.4, "ruEnd": 136.94, "ruText": "Хуан Сяомин сразу оживился."}, {"id": 30, "zhStart": 110.85, "zhEnd": 112.0, "zhText": "两年前,", "ruStart": 138.45, "ruEnd": 139.85, "ruText": "Два года назад,"}, {"id": 31, "zhStart": 112.15, "zhEnd": 115.91, "zhText": "黄晓明刚开始学偷东西的时候,", "ruStart": 141.97, "ruEnd": 145.13, "ruText": "когда Хуан Сяомин только начал учиться воровать,"}, {"id": 32, "zhStart": 115.97, "zhEnd": 121.0, "zhText": "就是先学着认识中国和外国的包,", "ruStart": 147.2, "ruEnd": 151.74, "ruText": "сначала он учился различать сумки китайского и иностранного производства,"}, {"id": 33, "zhStart": 121.0, "zhEnd": 125.0, "zhText": "然后再想办法打开它们。", "ruStart": 154.05, "ruEnd": 156.56, "ruText": "а потом находить способы их открыть."}, {"id": 34, "zhStart": 125.42, "zhEnd": 128.54, "zhText": "现在他已经能很容易地", "ruStart": 158.97, "ruEnd": 161.21, "ruText": "Теперь он уже без труда"}, {"id": 35, "zhStart": 128.63, "zhEnd": 131.0, "zhText": "打开一百多种包了。", "ruStart": 163.09, "ruEnd": 165.75, "ruText": "может открыть больше ста видов сумок."}, {"id": 36, "zhStart": 131.65, "zhEnd": 133.0, "zhText": "黄晓明知道,", "ruStart": 167.89, "ruEnd": 169.65, "ruText": "Хуан Сяомин знал,"}, {"id": 37, "zhStart": 133.35, "zhEnd": 136.0, "zhText": "这个男人的包很不错,", "ruStart": 171.92, "ruEnd": 175.13, "ruText": "что сумка этого мужчины была очень дорогой,"}, {"id": 38, "zhStart": 136.05, "zhEnd": 140.0, "zhText": "只有在很有名的大商店里才能买到。", "ruStart": 177.16, "ruEnd": 181.1, "ruText": "и такую можно купить только в известных крупных магазинах."}, {"id": 39, "zhStart": 140.7, "zhEnd": 143.0, "zhText": "买这种包要很多钱,", "ruStart": 183.09, "ruEnd": 185.81, "ruText": "Такая сумка стоит больших денег,"}, {"id": 40, "zhStart": 143.4, "zhEnd": 148.47, "zhText": "所以这个男人一定是个很有钱的人。", "ruStart": 187.08, "ruEnd": 190.08, "ruText": "поэтому мужчина наверняка был очень богат."}, {"id": 41, "zhStart": 148.77, "zhEnd": 153.0, "zhText": "黄晓明打算偷这个有钱的男人。", "ruStart": 192.36, "ruEnd": 195.45, "ruText": "Хуан Сяомин решил обокрасть этого богача."}, {"id": 42, "zhStart": 153.78, "zhEnd": 159.0, "zhText": "黄晓明只偷那些看起来特别有钱的人,", "ruStart": 197.56, "ruEnd": 201.8, "ruText": "Хуан Сяомин воровал только у тех, кто выглядел особенно богатым,"}, {"id": 43, "zhStart": 159.27, "zhEnd": 163.0, "zhText": "因为那些人的钱好像特别多。", "ruStart": 204.08, "ruEnd": 208.51, "ruText": "потому что, казалось, у таких людей было особенно много денег."}, {"id": 44, "zhStart": 163.4, "zhEnd": 165.17, "zhText": "偷了他们的钱包,", "ruStart": 210.44, "ruEnd": 212.9, "ruText": "Когда он крал у них кошельки,"}, {"id": 45, "zhStart": 165.35, "zhEnd": 168.0, "zhText": "他们好像一点儿事儿都没有。", "ruStart": 214.44, "ruEnd": 218.48, "ruText": "они, казалось, совершенно ничего не замечали."}, {"id": 46, "zhStart": 168.75, "zhEnd": 173.0, "zhText": "他不知道那些人的钱为什么那么多,", "ruStart": 220.31, "ruEnd": 224.21, "ruText": "Он не понимал, почему у этих людей так много денег,"}, {"id": 47, "zhStart": 173.25, "zhEnd": 176.19, "zhText": "所以偷那些有钱人的钱,", "ruStart": 226.16, "ruEnd": 228.67, "ruText": "поэтому, воруя у богатых,"}, {"id": 48, "zhStart": 176.45, "zhEnd": 180.28, "zhText": "黄晓明一点都不觉得对不起他们,", "ruStart": 230.72, "ruEnd": 234.64, "ruText": "Хуан Сяомин нисколько не чувствовал себя виноватым перед ними,"}, {"id": 49, "zhStart": 180.48, "zhEnd": 183.73, "zhText": "更不觉得有什么错。", "ruStart": 236.55, "ruEnd": 240.51, "ruText": "и тем более не считал, что делает что-то неправильное."}, {"id": 50, "zhStart": 183.95, "zhEnd": 186.38, "zhText": "黄晓明很会偷东西,", "ruStart": 242.14, "ruEnd": 245.43, "ruText": "Хуан Сяомин был очень искусен в воровстве,"}, {"id": 51, "zhStart": 186.65, "zhEnd": 191.0, "zhText": "每次偷人钱包的时候都做得很“干净”。", "ruStart": 247.59, "ruEnd": 253.09, "ruText": "и каждый раз, когда крал чей-нибудь кошелёк, делал это очень «чисто»."}, {"id": 52, "zhStart": 191.65, "zhEnd": 195.0, "zhText": "现在,他在火车站前边", "ruStart": 255.32, "ruEnd": 258.06, "ruText": "Теперь, стоя перед вокзалом,"}, {"id": 53, "zhStart": 195.15, "zhEnd": 200.0, "zhText": "准备偷那个刚下火车的特别有钱的男人。", "ruStart": 259.91, "ruEnd": 266.07, "ruText": "он собирался обокрасть того очень богатого мужчину, который только что сошёл с поезда."}, {"id": 54, "zhStart": 200.3, "zhEnd": 202.0, "zhText": "他一点也不紧张,", "ruStart": 268.26, "ruEnd": 270.28, "ruText": "Он совершенно не нервничал,"}, {"id": 55, "zhStart": 202.3, "zhEnd": 204.33, "zhText": "眼睛看着别的地方,", "ruStart": 272.38, "ruEnd": 274.55, "ruText": "смотрел в другую сторону,"}, {"id": 56, "zhStart": 204.38, "zhEnd": 208.0, "zhText": "慢慢地往那男人旁边走去。", "ruStart": 276.72, "ruEnd": 279.05, "ruText": "и медленно направился к мужчине."}, {"id": 57, "zhStart": 208.85, "zhEnd": 213.0, "zhText": "黄晓明从他身体旁边很快地走过去,", "ruStart": 281.56, "ruEnd": 284.43, "ruText": "Хуан Сяомин быстро прошёл мимо него,"}, {"id": 58, "zhStart": 213.0, "zhEnd": 216.0, "zhText": "那个男人没觉得有什么事,", "ruStart": 286.42, "ruEnd": 289.07, "ruText": "а мужчина ничего не заметил,"}, {"id": 59, "zhStart": 216.05, "zhEnd": 223.0, "zhText": "可是包里的钱包已经让黄晓明拿走了。", "ruStart": 291.0, "ruEnd": 294.92, "ruText": "но кошелёк из его сумки Хуан Сяомин уже успел забрать."}, {"id": 60, "zhStart": 223.14, "zhEnd": 227.0, "zhText": "但是黄晓明怎么也没想到,", "ruStart": 296.6, "ruEnd": 300.01, "ruText": "Но Хуан Сяомин никак не мог предположить,"}, {"id": 61, "zhStart": 227.17, "zhEnd": 233.0, "zhText": "就是这个钱包把他带进了一件大事情里。", "ruStart": 302.37, "ruEnd": 306.27, "ruText": "что именно этот кошелёк втянет его в серьёзное дело."}, {"id": 62, "zhStart": 233.0, "zhEnd": 235.0, "zhText": "黄晓明更没想到,", "ruStart": 308.4, "ruEnd": 311.36, "ruText": "Ещё меньше он мог предположить,"}, {"id": 63, "zhStart": 235.3, "zhEnd": 242.0, "zhText": "这件事被一个叫小三儿的小偷看在眼睛里。", "ruStart": 313.35, "ruEnd": 317.24, "ruText": "что за этой кражей наблюдал другой вор по имени Сяо Саньэр."}];
+
+const EMPTY_UNITS = [{"id": 1, "zhStart": 0, "zhEnd": 0, "zhText": "Субтитры для этой главы ещё не добавлены", "ruStart": null, "ruEnd": null}];
+const CH7_UNITS = [{"id": 1, "zhText": "回到家里,我给头雁做了一个很暖和的小家。", "ruText": "Вернувшись домой, я сделал для вожака гусей очень тёплый маленький домик."}, {"id": 2, "zhText": "还把我喜欢吃的东西和一个苹果拿给它。", "ruText": "Ещё я принёс ему то, что я люблю есть, и одно яблоко."}, {"id": 3, "zhText": "可是,它只喝了一点水,它不动,也不叫。", "ruText": "Но он выпил только немного воды, он не двигался и не кричал."}, {"id": 4, "zhText": "它在想什么呢?是想它的雁队吗?是想飞吗?", "ruText": "О чём он думает? О своей стае гусей? Хочет летать?"}, {"id": 5, "zhText": "这时候,一只小一点的,非常好看的大雁,叫着飞到了我们的房子上。", "ruText": "В это время один гусь, немного поменьше, очень красивый, с криком прилетел на крышу нашего дома."}, {"id": 6, "zhText": "它非常好看,羽毛很干净,是一只漂亮的雁姑娘。", "ruText": "Он был очень красивый, перья очень чистые, это была красивая девушка-гусыня."}, {"id": 7, "zhText": "头雁看见它,马上高兴地叫起来。", "ruText": "Вожак гусей увидел её и сразу радостно закричал."}, {"id": 8, "zhText": "那只大雁也特别高兴,在房子上飞来飞去,", "ruText": "Та гусыня тоже была особенно рада, летала туда-сюда по дому,"}, {"id": 9, "zhText": "对着头雁叫啊叫,好像在说:「快点上来,和我一起飞吧,我等着你呢。」", "ruText": "кричала вожаку гусей, словно говорила: «Быстрее поднимайся сюда, давай полетим вместе, я тебя жду»."}, {"id": 10, "zhText": "可是,头雁伤得太重了,它飞了几次,怎么都飞不起来。", "ruText": "Но вожак гусей был слишком тяжело ранен, он несколько раз полетел, но никак не мог взлететь."}, {"id": 11, "zhText": "见头雁飞不起来,那只来找它的大雁高兴不起来了。", "ruText": "Увидев, что вожак гусей не может взлететь, та гусыня, которая пришла искать его, больше не могла радоваться."}, {"id": 12, "zhText": "它的眼睛看着头雁,飞啊,叫啊,上上下下地飞,来来回回地叫。", "ruText": "Она смотрела глазами на вожака гусей, летала, кричала, летала вверх и вниз, кричала туда и обратно."}, {"id": 13, "zhText": "一下午,叫的嘴里都有红的东西掉出来了,", "ruText": "Целый день она кричала, так что из её рта уже выпадали красные вещи,"}, {"id": 14, "zhText": "头雁也对着它叫啊叫,两只大雁的眼睛里好像都有泪。", "ruText": "вожак гусей тоже кричал ей, и в глазах обоих гусей словно были слёзы."}, {"id": 15, "zhText": "这两只大雁真的又累又绝望。", "ruText": "Эти два гуся действительно были и уставшими, и отчаявшимися."}, {"id": 16, "zhText": "晚上下雨了,天气更冷了,我觉得房间外边有点不对,马上跑出去。", "ruText": "Вечером пошёл дождь, погода стала ещё холоднее, мне показалось, что снаружи комнаты что-то не так, и я сразу выбежал."}, {"id": 17, "zhText": "「啊!爷爷、奶奶、爸爸、妈妈、哥哥、姐姐,你们快来啊。」", "ruText": "«А! Дедушка, бабушка, папа, мама, старший брат, старшая сестра, скорее идите сюда!»"}, {"id": 18, "zhText": "我大叫起来,家里人都跑出来了,住在我家旁边的人听到我叫,也来了。", "ruText": "Я громко закричал, все домашние выбежали, люди, жившие рядом с нашим домом, услышав мой крик, тоже пришли."}, {"id": 19, "zhText": "大家看见,在冷冷的下雨的晚上,", "ruText": "Все увидели, что в холодный дождливый вечер,"}, {"id": 20, "zhText": "两只大雁长长的脖子缠在一起,已经快要死了。", "ruText": "длинные шеи двух гусей были обвиты друг вокруг друга, они уже почти умирали."}, {"id": 21, "zhText": "这时候我才知道,那只好看的大雁是头雁的女朋友,", "ruText": "Только тогда я узнал, что та красивая гусыня была девушкой вожака гусей,"}, {"id": 22, "zhText": "头雁非常爱它,它也非常爱头雁。", "ruText": "вожак гусей очень любил её, и она тоже очень любила вожака гусей."}, {"id": 23, "zhText": "看见头雁不能和自己一起飞了,它很绝望,", "ruText": "Увидев, что вожак гусей больше не может летать вместе с ней, она пришла в отчаяние,"}, {"id": 24, "zhText": "就在天黑了的时候飞下来,把自己的长脖子和头雁的缠在一起。", "ruText": "и когда стемнело, она спустилась, обвив свою длинную шею вокруг шеи вожака гусей."}, {"id": 25, "zhText": "不能一起飞了,两只大雁就想一起死。", "ruText": "Раз нельзя было летать вместе, два гуся решили вместе умереть."}, {"id": 26, "zhText": "爷爷很快地跑过来,把头雁的脖子拿到旁边,两只大雁才没有死。", "ruText": "Дедушка быстро подбежал, отодвинул шею вожака гусей в сторону, и только тогда два гуся не умерли."}, {"id": 27, "zhText": "「我的好雁,我的好孩子。」爷爷这么说的时候,眼睛里都是泪。", "ruText": "«Мой хороший гусь, мой хороший ребёнок». Когда дедушка так сказал, в его глазах были одни слёзы."}, {"id": 28, "zhText": "「真是打雁打双啊。」", "ruText": "«Действительно, охотиться на гусей — охотиться на пару»."}, {"id": 29, "zhText": "看见两只大雁这样,大家的眼睛里都有很多泪。", "ruText": "Увидев двух гусей такими, у всех в глазах было много слёз."}, {"id": 30, "zhText": "从这天晚上开始,村子里的人都不再打雁了。", "ruText": "С этого вечера люди в деревне больше не стали охотиться на гусей."}];
+const CH8_UNITS = [{"id": 1, "zhText": "8. 两只远近有名的大雁", "ruText": "Два знаменитых на всю округу гуся."}, {"id": 2, "zhText": "头雁和它的女朋友在我家住下了。", "ruText": "Вожак гусей и его подруга поселились у меня дома."}, {"id": 3, "zhText": "因为头雁的翅膀旁边有一些白颜色的羽毛,", "ruText": "Потому что возле крыла вожака были несколько белого цвета перьев,"}, {"id": 4, "zhText": "所以我给了它一个名字,叫小白。", "ruText": "поэтому я дал ему имя, назвал Сяобай."}, {"id": 5, "zhText": "小白女朋友的翅膀旁边有一些好看的黄颜色的羽毛,", "ruText": "Возле крыла подруги Сяобая были несколько красивых жёлтого цвета перьев,"}, {"id": 6, "zhText": "所以我给了它一个名字,叫小黄。", "ruText": "поэтому я дал ей имя, назвал Сяохуан."}, {"id": 7, "zhText": "没过多长时间,两只大雁就已经知道我家的习惯,", "ruText": "Не прошло много времени, как два гуся уже узнали привычки моей семьи,"}, {"id": 8, "zhText": "能听懂我家人说话了。", "ruText": "и смогли понимать речь членов моей семьи."}, {"id": 9, "zhText": "爷爷一叫小白,小白就马上走过去。", "ruText": "Как только дедушка позовёт Сяобая, Сяобай сразу идёт туда."}, {"id": 10, "zhText": "奶奶一叫小黄,小黄就马上往奶奶那里看。", "ruText": "Как только бабушка позовёт Сяохуан, Сяохуан сразу смотрит в сторону бабушки."}, {"id": 11, "zhText": "妈妈说,现在吃饭了,两只大雁就一起往碗那里走。", "ruText": "Мама говорит: «Сейчас есть», — и два гуся вместе идут в сторону миски."}, {"id": 12, "zhText": "哥哥姐姐一说,睡觉睡觉,", "ruText": "Как только старшие брат и сестра говорят: «Спать, спать»,"}, {"id": 13, "zhText": "小白小黄就一前一后走进自己的小房子里去了。", "ruText": "Сяобай и Сяохуан один впереди, другой сзади заходят в свой маленький домик."}, {"id": 14, "zhText": "真有意思!", "ruText": "Действительно интересно!"}, {"id": 15, "zhText": "小白身体上的伤好了一些,能走远一些的路了。", "ruText": "Рана на теле Сяобая стала немного лучше, он уже мог проходить немного более дальний путь."}, {"id": 16, "zhText": "每天我去学校,小白和小黄就跟着我一起去,", "ruText": "Каждый день, когда я иду в школу, Сяобай и Сяохуан идут вместе со мной,"}, {"id": 17, "zhText": "有时候走在我前面,有时候走在我后面。", "ruText": "иногда идут передо мной, иногда идут позади меня."}, {"id": 18, "zhText": "我在教室里学习新字和历史什么的,", "ruText": "Я в классе учу новые иероглифы и историю и тому подобное,"}, {"id": 19, "zhText": "小白小黄就在学校门外边玩,等着我。", "ruText": "а Сяобай и Сяохуан играют снаружи у школьных ворот, ждут меня."}, {"id": 20, "zhText": "这两只大雁特别懂事。", "ruText": "Эти два гуся особенно понятливые."}, {"id": 21, "zhText": "我和同学在教室复习,或者在那个很小的图书馆里看书的时候,", "ruText": "Когда я с одноклассниками повторяю в классе или читаю книги в той очень маленькой библиотеке,"}, {"id": 22, "zhText": "小黄小白一点儿都不叫。", "ruText": "Сяохуан и Сяобай совсем не кричат."}, {"id": 23, "zhText": "等我们上音乐课的时候,小白小黄就跟着大叫起来,好像也在唱歌、跳舞。", "ruText": "Когда мы начинаем урок музыки, Сяобай и Сяохуан тоже начинают громко кричать, как будто тоже поют и танцуют."}, {"id": 24, "zhText": "这么懂事的大雁,老师和同学都很喜欢。", "ruText": "Таких понятливых гусей и учителя, и одноклассники очень любят."}, {"id": 25, "zhText": "可是,有一天,我们班一个名叫狗狗的同学对我说,", "ruText": "Но однажды один одноклассник из нашего класса по имени Гоугоу сказал мне,"}, {"id": 26, "zhText": "\"你以为你的大雁是最好的吗?告诉你吧,你的大雁没有我的狗好。", "ruText": "«Ты думаешь, твои гуси самые лучшие? Скажу тебе: твои гуси не так хороши, как моя собака."}, {"id": 27, "zhText": "我的狗已经学会帮爸爸买茶,", "ruText": "Моя собака уже научилась помогать папе покупать чай,"}, {"id": 28, "zhText": "帮妈妈买菜,帮弟弟买水果,帮妹妹买小本儿了。", "ruText": "помогать маме покупать овощи, помогать младшему брату покупать фрукты, помогать младшей сестре покупать маленькие тетради."}, {"id": 29, "zhText": "你的大雁会吗?\"", "ruText": "А твои гуси умеют?»"}, {"id": 30, "zhText": "狗狗的话,说得我有点儿不高兴。", "ruText": "Слова Гоугоу немного заставили меня расстроиться."}, {"id": 31, "zhText": "我想,我的大雁那么懂事,你的狗行,我的大雁一定也不差。", "ruText": "Я подумал: мои гуси такие понятливые, если твоя собака может, мои гуси наверняка тоже не хуже."}, {"id": 32, "zhText": "从那天开始,我一有空儿,", "ruText": "С того дня, как только у меня появлялось свободное время,"}, {"id": 33, "zhText": "就带小白小黄去村子里的小商店,看着别人买东西,", "ruText": "я водил Сяобая и Сяохуан в маленький магазинчик в деревне, смотрел, как другие покупают вещи,"}, {"id": 34, "zhText": "还一次又一次地对小白小黄说,\"记着,商店,这是商店。\"", "ruText": "и ещё снова и снова говорил Сяобаю и Сяохуан: «Запоминайте, магазин, это магазин»."}, {"id": 35, "zhText": "过了一些天,小白小黄就认识去小商店的路了。", "ruText": "Через несколько дней Сяобай и Сяохуан уже знали дорогу к маленькому магазинчику."}, {"id": 36, "zhText": "我想试试我的大雁。", "ruText": "Я захотел испытать своих гусей."}, {"id": 37, "zhText": "一天上午,我在小白的脖子那儿放上一个小包,", "ruText": "Однажды утром я положил возле шеи Сяобая маленькую сумку,"}, {"id": 38, "zhText": "小包里放着跟妈妈要来的五分钱,", "ruText": "в маленькой сумке лежали пять центов, которые я попросил у мамы,"}, {"id": 39, "zhText": "再用笔在一个小本子上写上\"买一支红笔\"几个字,", "ruText": "затем ручкой написал в маленькой тетради несколько слов «купить одну красную ручку»,"}, {"id": 40, "zhText": "放进小包里,告诉小白小黄说,\"去吧,到商店里给我买一支红笔。\"", "ruText": "положил это в маленькую сумку и сказал Сяобаю и Сяохуан: «Идите, купите мне в магазине одну красную ручку»."}, {"id": 41, "zhText": "小白小黄就真的出了门,往小商店走。", "ruText": "Сяобай и Сяохуан действительно вышли из дома и пошли к маленькому магазину."}, {"id": 42, "zhText": "我远远地跟着看,见小白小黄真的进了商店。", "ruText": "Я издалека следовал за ними и увидел, что Сяобай и Сяохуан действительно вошли в магазин."}, {"id": 43, "zhText": "卖东西的阿姨早就知道小白小黄的故事,也非常喜欢小白小黄。", "ruText": "Тётушка, которая продавала вещи, уже давно знала историю Сяобая и Сяохуан и тоже очень любила Сяобая и Сяохуан."}, {"id": 44, "zhText": "现在看见小白小黄像狗狗家的狗一样,", "ruText": "Теперь, увидев, что Сяобай и Сяохуан, как собака из дома Гоугоу,"}, {"id": 45, "zhText": "脖子上带着小包来了,阿姨就笑了。", "ruText": "пришли с маленькой сумкой на шее, тётушка засмеялась."}, {"id": 46, "zhText": "从小包里拿出钱,", "ruText": "Она достала деньги из маленькой сумки,"}, {"id": 47, "zhText": "又拿出我写着字的本子看了看,然后把一支红笔放进小包里。", "ruText": "потом достала мою тетрадь с написанными словами, посмотрела и затем положила одну красную ручку в маленькую сумку."}, {"id": 48, "zhText": "小白和小黄就高高兴兴地叫着回家了。", "ruText": "Сяобай и Сяохуан радостно крича пошли домой."}, {"id": 49, "zhText": "看见小白小黄这么懂事,爸爸妈妈一忙起来,", "ruText": "Увидев, что Сяобай и Сяохуан такие понятливые, как только папа и мама начинали быть заняты,"}, {"id": 50, "zhText": "也常常叫小白小黄去帮着买东西。", "ruText": "они тоже часто звали Сяобая и Сяохуан помочь купить вещи."}, {"id": 51, "zhText": "奶奶不会写字,就在本子上画上要买的东西,", "ruText": "Бабушка не умела писать, поэтому рисовала в тетради вещи, которые нужно купить,"}, {"id": 52, "zhText": "小白小黄也能把奶奶要的东西买回来,真有意思。", "ruText": "а Сяобай и Сяохуан тоже могли купить и принести вещи, которые хотела бабушка. Действительно интересно."}, {"id": 53, "zhText": "在狗狗生日那天,", "ruText": "В день рождения Гоугоу,"}, {"id": 54, "zhText": "我叫小白小黄到小商店里给狗狗买了一块只能玩不能走的表做礼物。", "ruText": "я попросил Сяобая и Сяохуан пойти в маленький магазин и купить Гоугоу в подарок часы, которыми можно только играть, но нельзя ходить."}, {"id": 55, "zhText": "虽然很便宜,但是狗狗非常高兴,", "ruText": "Хотя это было очень дёшево, Гоугоу был очень рад,"}, {"id": 56, "zhText": "说我的狗好,你的大雁也好。", "ruText": "сказал: «Моя собака хорошая, твои гуси тоже хорошие»."}, {"id": 57, "zhText": "没过多长时间,小白和小黄的事,远近的村子就都知道了。", "ruText": "Не прошло много времени, и о делах Сяобая и Сяохуан узнали все деревни — близкие и дальние."}, {"id": 58, "zhText": "小白小黄已经很有名了。", "ruText": "Сяобай и Сяохуан уже стали очень известными."}, {"id": 59, "zhText": "有一天,两个男人和一个小姐开着车来到村子里,那个小姐看见人就问:", "ruText": "Однажды два мужчины и одна девушка приехали на машине в деревню, и та девушка, увидев людей, спросила:"}, {"id": 60, "zhText": "\"听说你们村子里有两只大雁?\"村子里的人就把他们带到我家。", "ruText": "«Я слышала, что в вашей деревне есть два гуся?» Люди из деревни тогда привели их ко мне домой."}, {"id": 61, "zhText": "他们一看见小白和小黄,", "ruText": "Как только они увидели Сяобая и Сяохуан,"}, {"id": 62, "zhText": "马上拿出一个大包,包住小白小黄,就带走了。", "ruText": "они сразу достали большую сумку, накрыли Сяобая и Сяохуан и забрали их."}, {"id": 63, "zhText": "他们自己介绍说,他们是动物保护协会的。", "ruText": "Они сами представились и сказали, что они из Ассоциации защиты животных."}, {"id": 64, "zhText": "村子里的人都问,什么叫动物保护协会?", "ruText": "Все люди в деревне спросили: «Что называется Ассоциацией защиты животных?»"}, {"id": 65, "zhText": "那个小姐就说,咱们国家的动物保护协会,", "ruText": "Та девушка сказала: «Ассоциация защиты животных нашей страны"}, {"id": 66, "zhText": "是今年才有的一个协会,所以你们不知道。", "ruText": "— это ассоциация, которая появилась только в этом году, поэтому вы не знаете."}, {"id": 67, "zhText": "也就是说,我们是一个爱动物、保护动物、不让人们打动物的协会。", "ruText": "То есть мы — ассоциация, которая любит животных, защищает животных и не позволяет людям бить животных»."}, {"id": 68, "zhText": "没有了小白小黄,我们家的人都很不愉快,", "ruText": "Без Сяобая и Сяохуан все люди в нашей семье были очень несчастны,"}, {"id": 69, "zhText": "爷爷奶奶睡不好觉,爸爸妈妈不说话,哥哥姐姐不唱也不笑。", "ruText": "дедушка и бабушка плохо спали, папа и мама не разговаривали, старшие брат и сестра не пели и не смеялись."}, {"id": 70, "zhText": "我天天吃不下饭,家里好像一下少了很多东西,再也没有了快乐。", "ruText": "Я каждый день не мог есть, казалось, будто в доме сразу стало намного меньше вещей, и больше не стало радости."}];
+const CH9_UNITS = [{"id": 1, "zhText": "9. 小白、小黄在哪里? 我想给动物保护协会写信, 可是我不知道应该往哪里寄。", "ruText": "Сяобай и Сяохуан где? Я хочу написать письмо в Ассоциацию защиты животных, но не знаю, куда его следует отправить."}, {"id": 2, "zhText": "就这样,过了一个星期,", "ruText": "Вот так прошла одна неделя."}, {"id": 3, "zhText": "我告诉爷爷,我特别特别想小白和小黄。", "ruText": "Я сказал дедушке, что я очень-очень скучаю по Сяобаю и Сяохуану."}, {"id": 4, "zhText": "爷爷说, \"明天咱们去看看小白和小黄。\" 我高兴极了,第二天是周末。 \"不去学校,我有空。\"", "ruText": "Дедушка сказал: «Завтра мы пойдём посмотреть Сяобая и Сяохуана». Я был чрезвычайно рад, на следующий день были выходные. «В школу не иду, у меня есть время»."}, {"id": 5, "zhText": "第二天早上,我换下旧了的衬衫和裤子,", "ruText": "На следующее утро я снял старые рубашку и брюки,"}, {"id": 6, "zhText": "穿上了最好看的新衣服,", "ruText": "надел самую красивую новую одежду,"}, {"id": 7, "zhText": "还准备了小白、小黄最爱吃的东西, 就等着和爷爷去城市里。 城市虽然很远,", "ruText": "ещё приготовил то, что Сяобай и Сяохуан больше всего любят есть, и только ждал, когда мы с дедушкой поедем в город. Хотя город был очень далеко,"}, {"id": 8, "zhText": "坐汽车差不多要一个小时,", "ruText": "ехать на машине было примерно один час,"}, {"id": 9, "zhText": "但是为少用一些钱, 我和爷爷早早起来,", "ruText": "но чтобы потратить немного меньше денег, мы с дедушкой рано встали,"}, {"id": 10, "zhText": "打算骑自行车去。", "ruText": "собирались поехать на велосипедах."}, {"id": 11, "zhText": "那时候,在我这个十二岁孩子的眼睛里, 这个小城市好像很大很大, 也非常有意思。", "ruText": "В то время, в глазах такого двенадцатилетнего ребёнка, этот маленький город казался очень-очень большим и очень интересным."}, {"id": 12, "zhText": "这里有一些公司,", "ruText": "Здесь было несколько компаний,"}, {"id": 13, "zhText": "还有一个公园,几个商店。 在城市的西边, 我和爷爷进了一个书店。 书店虽然不大,", "ruText": "а ещё один парк и несколько магазинов. На западе города мы с дедушкой вошли в книжный магазин. Хотя книжный магазин был небольшой,"}, {"id": 14, "zhText": "但有书有词典, 有报纸有杂志, 还有一本又有中文又有英文的故事书, 很好看。", "ruText": "но там были книги и словари, газеты и журналы, а ещё была одна книга с рассказами и на китайском, и на английском, очень хорошая."}, {"id": 15, "zhText": "有的杂志讲新电影、新电视的故事,", "ruText": "В некоторых журналах рассказываются истории новых фильмов и новых телепередач,"}, {"id": 16, "zhText": "有的杂志上有很多照片,", "ruText": "на некоторых журналах было много фотографий,"}, {"id": 17, "zhText": "有一本杂志上面有外国的大机场、 大飞机、大火车和大汽车的照片, 很漂亮。", "ruText": "в одном журнале были фотографии больших иностранных аэропортов, больших самолётов, больших поездов и больших автомобилей, очень красивые."}, {"id": 18, "zhText": "二十五年前,一些和我一样的中国人都没有见过这些呢。 要是在三个月以前,", "ruText": "Двадцать пять лет назад некоторые китайцы, такие же, как я, вообще не видели этого. Если бы это было три месяца назад,"}, {"id": 19, "zhText": "我一定会缠着爷爷要那本有大飞机、 大火车的杂志, 因为那时候爷爷打雁可以卖不少钱。", "ruText": "я обязательно приставал бы к дедушке, чтобы попросить тот журнал с большими самолётами и большими поездами, потому что тогда дедушка, охотясь на гусей, мог продать их за немало денег."}, {"id": 20, "zhText": "但是现在, 我知道我不能要这本杂志了。 对我们来说, 这本杂志太贵了,", "ruText": "Но сейчас я знаю, что не могу взять этот журнал. Для нас этот журнал слишком дорогой,"}, {"id": 21, "zhText": "爷爷现在没有钱。 在走出书店的时候, 我问自己, 在\"打雁\"和\"有钱\"两个里,", "ruText": "у дедушки сейчас нет денег. Когда я выходил из книжного магазина, я спросил себя: из двух — «охотиться на гусей» и «иметь деньги» —"}, {"id": 22, "zhText": "只给你一个, 你要什么? 我想, 我当然是不要打雁! 大雁是多好的动物啊!", "ruText": "тебе дают только одно, чего ты хочешь? Я думаю, конечно, я не хочу охотиться на гусей! Большие гуси — какие хорошие животные!"}, {"id": 23, "zhText": "就是再没钱, 我也一定不要打雁!", "ruText": "Даже если совсем не будет денег, я всё равно обязательно не буду охотиться на гусей."}, {"id": 24, "zhText": "我对自己说, 没关系,", "ruText": "Я сказал себе: ничего страшного,"}, {"id": 25, "zhText": "我可以到学校的小图书馆里去借书,", "ruText": "я могу пойти в маленькую школьную библиотеку взять книги,"}, {"id": 26, "zhText": "那里有一些我有兴趣的书、报、杂志,还有大大小小三四种词典呢。", "ruText": "там есть некоторые книги, газеты, журналы, которые мне интересны, а ещё три-четыре вида словарей, больших и маленьких."}, {"id": 27, "zhText": "再说, 我已经快长大了, 我要好好学习, 上一个好大学, 工作以后有了钱,", "ruText": "К тому же, я уже скоро вырасту, я должен хорошо учиться, поступить в хороший университет, после работы, когда появятся деньги,"}, {"id": 28, "zhText": "就可以买我喜欢的书了。 这样想的时候,", "ruText": "тогда смогу покупать книги, которые мне нравятся. Когда я так думал,"}, {"id": 29, "zhText": "我快乐起来。 我们不知道动物保护协会在哪儿,", "ruText": "я стал радостным. Мы не знали, где находится Ассоциация защиты животных,"}, {"id": 30, "zhText": "更不知道他们的房子是什么样的, 所以,我和爷爷不知道怎样才能找到他们。", "ruText": "ещё больше не знали, как выглядит их дом, поэтому мы с дедушкой не знали, как же найти их."}, {"id": 31, "zhText": "在城市里, 我们一会儿往东,", "ruText": "В городе мы некоторое время шли на восток,"}, {"id": 32, "zhText": "一会儿往南, 像参观一样走了半天, 我和爷爷才在城市的北门附近找到它。", "ruText": "некоторое время на юг, словно осматривая город, полдня ходили, и только тогда мы с дедушкой нашли его около северных ворот города."}, {"id": 33, "zhText": "进了门, 我往里一看, 就看见小白和小黄关在左边一间很小的房子里,", "ruText": "Войдя в ворота, я посмотрел внутрь и увидел Сяобая и Сяохуана, запертых в одной очень маленькой комнате слева,"}, {"id": 34, "zhText": "一点儿都不快乐, 不唱歌, 也不跳舞,", "ruText": "совсем нисколько не радостных, не поющих и также не танцующих,"}, {"id": 35, "zhText": "身体旁边有一个碗,", "ruText": "рядом с телом была одна миска,"}, {"id": 36, "zhText": "碗里有一些好像放了两三天已经不太好了的饭。 看起来小白、小黄很长时间没有吃饭了。", "ruText": "в миске было немного еды, которая, похоже, пролежала два-три дня и уже была не очень хорошей. По виду Сяобай и Сяохуан очень долго не ели."}, {"id": 37, "zhText": "我的眼睛里一下有了泪, 大叫着:", "ruText": "В моих глазах сразу появились слёзы, я громко закричал:"}, {"id": 38, "zhText": "\"小白、小黄,你们怎么了?\" 跑到那个小房子旁边, 小白和小黄看见我,", "ruText": "«Сяобай, Сяохуан, что с вами?» Я побежал к той маленькой комнате, Сяобай и Сяохуан увидели меня,"}, {"id": 39, "zhText": "马上站起来快乐地叫着, 翅膀像飞一样,", "ruText": "сразу встали и радостно закричали, крыльями словно летая,"}, {"id": 40, "zhText": "一上一下地欢迎我。 我好像听到小白、小黄在说: \"好久不见,真想你,快进来,快进来!\"", "ruText": "вверх и вниз приветствуя меня. Мне как будто послышалось, что Сяобай и Сяохуан говорят: «Давно не виделись, очень скучали по тебе! Скорее заходи, скорее заходи!»"}, {"id": 41, "zhText": "我拿出小白、小黄喜欢吃的东西,", "ruText": "Я достал то, что любят есть Сяобай и Сяохуан,"}, {"id": 42, "zhText": "小白、小黄很快地吃了起来。 那几个从我家带走小白、小黄的男人和小姐", "ruText": "Сяобай и Сяохуан быстро начали есть. Те мужчины и девушка, которые забрали Сяобая и Сяохуана из моего дома,"}, {"id": 43, "zhText": "注意地看着我们, 看见大雁那么高兴地欢迎我,", "ruText": "внимательно смотрели на нас, увидели, как гуси так радостно приветствуют меня,"}, {"id": 44, "zhText": "还那么快地吃东西, 就站在一起说了一会儿话, 然后走进一个房间, 关上门。 过了一会儿,", "ruText": "и ещё так быстро едят, постояли вместе и некоторое время поговорили, потом вошли в комнату и закрыли дверь. Через некоторое время,"}, {"id": 45, "zhText": "他们出来了,那个小姐对我说: \"我们刚刚给北京的国家动物保护协会打了电话,", "ruText": "они вышли, и та девушка сказала мне: «Мы только что позвонили в Пекинскую государственную ассоциацию защиты животных,"}, {"id": 46, "zhText": "谈了你们和这两只大雁的情况。\" 停了一下,她又说:", "ruText": "поговорили о ситуации с вами и этими двумя гусями». Она остановилась и снова сказала:"}, {"id": 47, "zhText": "\"孩子,你如果真的爱这两只大雁, 现在你可以把这两只大雁带回家了,", "ruText": "«Ребёнок, если ты действительно любишь этих двух гусей, сейчас ты можешь забрать этих двух гусей домой,"}, {"id": 48, "zhText": "因为在这里的一星期, 这两只大雁一点饭也没吃,", "ruText": "потому что за неделю здесь эти два гуся совсем не ели еды,"}, {"id": 49, "zhText": "一点水也没喝。\" 昨天我们还在说: \"再这样,这两只大雁会死的。\"", "ruText": "совсем не пили воды». Ещё вчера мы говорили: «Если так продолжится, эти два гуся умрут»."}, {"id": 50, "zhText": "\"谢谢您!\" 我高兴地叫起来:", "ruText": "«Спасибо вам!» — радостно закричал я."}, {"id": 51, "zhText": "\"不过,希望你好好对这两只大雁,", "ruText": "«Однако надеюсь, что ты будешь хорошо обращаться с этими двумя гусями,"}, {"id": 52, "zhText": "要是你不能让这两只大雁好起来,", "ruText": "если ты не сможешь сделать так, чтобы эти два гуся поправились,"}, {"id": 53, "zhText": "我就不能让你把这两只大雁带走。\" \"会的,我一定好好对小白、小黄。\"", "ruText": "я не смогу позволить тебе забрать этих двух гусей». «Смогу, я обязательно буду хорошо обращаться с Сяобаем и Сяохуаном!»"}, {"id": 54, "zhText": "说着,我看了看爷爷, 我看见一星期没笑的爷爷笑了。 小白、小黄回来了, 村子里的人都非常高兴,", "ruText": "Говоря это, я посмотрел на дедушку. Я увидел, что дедушка, который неделю не улыбался, улыбнулся. Сяобай и Сяохуан вернулись, люди в деревне все были очень рады,"}, {"id": 55, "zhText": "老老小小都来我家看小白、小黄。", "ruText": "старые и маленькие, все пришли ко мне домой посмотреть на Сяобая и Сяохуана."}, {"id": 56, "zhText": "从早上到中午, 从中午到晚上,", "ruText": "с утра до полудня, с полудня до вечера,"}, {"id": 57, "zhText": "我家的客厅里一共来了九十多个人,", "ruText": "в гостиную моего дома всего пришло больше девяноста человек,"}, {"id": 58, "zhText": "一些人走的时候还说:", "ruText": "некоторые люди, когда уходили, ещё говорили:"}, {"id": 59, "zhText": "\"明天、后天还要再来看小白和小黄。\" 这一天,我们的早饭、午饭、晚饭都没有吃好,", "ruText": "«Завтра и послезавтра ещё придём снова посмотреть на Сяобая и Сяохуана». В этот день наш завтрак, обед и ужин — всё не удалось хорошо поесть,"}, {"id": 60, "zhText": "但是我们很快乐。", "ruText": "но мы были очень счастливы."}];
+const CH11_UNITS = [{"id": 1, "zhStart": 6.95, "zhEnd": 14.0, "zhText": "11. 再见吧，大雁，我爱你们！", "ruStart": 1.84, "ruEnd": 5.21, "ruText": "До свидания, дикие гуси, я люблю вас!"}, {"id": 2, "zhStart": 15.0, "zhEnd": 18.0, "zhText": "下午，天气很好，", "ruStart": 6.89, "ruEnd": 9.76, "ruText": "После полудня погода [была] очень хорошая,"}, {"id": 3, "zhStart": 18.73, "zhEnd": 28.0, "zhText": "我和爷爷带着小白小黄往村子外边的湿地走，", "ruStart": 11.47, "ruEnd": 18.8, "ruText": "Я и дедушка, ведя с собой Сяо Бай [и] Сяо Хуан, в направлении внешней стороны деревни, к заболоченным землям, шли,"}, {"id": 4, "zhStart": 28.92, "zhEnd": 39.0, "zhText": "村子里的人好像知道我们要做什么，都不说话地跟着我们，", "ruStart": 20.96, "ruEnd": 26.08, "ruText": "Люди в деревне как будто знали, что мы хотим делать, и все молча следовали за нами,"}, {"id": 5, "zhStart": 39.2, "zhEnd": 45.0, "zhText": "大家都想送送小白小黄。", "ruStart": 27.61, "ruEnd": 30.98, "ruText": "Все хотели проводить Сяо Бай и Сяо Хуан."}, {"id": 6, "zhStart": 45.7, "zhEnd": 51.0, "zhText": "来到湿地，爷爷慢慢地说：", "ruStart": 32.68, "ruEnd": 36.2, "ruText": "Придя на заболоченные земли, дедушка медленно сказал:"}, {"id": 7, "zhStart": 51.73, "zhEnd": 69.0, "zhText": "“好了，我的大雁，我的好雁。飞吧，去找你们的雁队，过你们自己的生活吧。", "ruStart": 37.66, "ruEnd": 46.75, "ruText": "«Ну ладно, мои дикие гуси, мои хорошие гуси. Летите, идите искать свою стаю, живите своей собственной жизнью."}, {"id": 8, "zhStart": 69.58, "zhEnd": 80.0, "zhText": "但是，以后不要忘了带着你们生的孩子回来看看。”", "ruStart": 48.68, "ruEnd": 52.94, "ruText": "Но в будущем не забывайте возвращаться и приводить с собой своих детей»."}, {"id": 9, "zhStart": 80.54, "zhEnd": 91.0, "zhText": "听了爷爷的话，一起来的人有的笑了，有的没笑，", "ruStart": 54.72, "ruEnd": 60.59, "ruText": "Послушав дедушкины слова, некоторые из пришедших улыбнулись, а некоторые — нет,"}, {"id": 10, "zhStart": 91.43, "zhEnd": 101.0, "zhText": "但是，笑了的和没笑的人眼睛里都有了泪。", "ruStart": 62.56, "ruEnd": 68.33, "ruText": "Однако в глазах и тех, кто улыбался, и тех, кто не улыбался, появились слёзы."}, {"id": 11, "zhStart": 101.52, "zhEnd": 111.0, "zhText": "小白小黄叫着飞到湿地去了，看起来很快乐。", "ruStart": 70.24, "ruEnd": 76.66, "ruText": "Сяо Бай и Сяо Хуан, крича, полетели к заболоченным землям и выглядели очень счастливыми."}, {"id": 12, "zhStart": 111.85, "zhEnd": 117.0, "zhText": "是啊，小白小黄是大雁，", "ruStart": 78.78, "ruEnd": 82.24, "ruText": "Да, Сяо Бай и Сяо Хуан — дикие гуси,"}, {"id": 13, "zhStart": 117.59, "zhEnd": 130.29, "zhText": "看见那么多和自己一样的大雁，应该快乐。我这样对自己说。", "ruStart": 84.17, "ruEnd": 91.63, "ruText": "Увидев так много таких же, как они, диких гусей, они должны быть счастливы. Я так сказал себе."}, {"id": 14, "zhStart": 131.0, "zhEnd": 138.0, "zhText": "晚上，我在房间里怎么也睡不好觉，", "ruStart": 93.67, "ruEnd": 96.47, "ruText": "Вечером я никак не мог уснуть в своей комнате,"}, {"id": 15, "zhStart": 138.49, "zhEnd": 146.0, "zhText": "好像老听到小白小黄在附近叫。", "ruStart": 98.45, "ruEnd": 104.13, "ruText": "Мне всё время казалось, что я слышу, как Сяо Бай и Сяо Хуан кричат поблизости."}, {"id": 16, "zhStart": 146.45, "zhEnd": 151.0, "zhText": "我知道，爷爷也没睡觉。", "ruStart": 106.43, "ruEnd": 109.09, "ruText": "Я знал, что дедушка тоже не спал."}, {"id": 17, "zhStart": 151.46, "zhEnd": 161.0, "zhText": "时间一分一分，一小时一小时地往前走，", "ruStart": 111.09, "ruEnd": 114.35, "ruText": "Время шло минута за минутой, час за часом,"}, {"id": 18, "zhStart": 161.85, "zhEnd": 167.0, "zhText": "村子里的人大概都睡觉了，", "ruStart": 116.72, "ruEnd": 119.63, "ruText": "Наверное, все люди в деревне уже спали,"}, {"id": 19, "zhStart": 167.47, "zhEnd": 175.0, "zhText": "可是爷爷听到了什么，很快地起床了，", "ruStart": 122.01, "ruEnd": 125.31, "ruText": "Но дедушка что-то услышал и быстро встал с постели,"}, {"id": 20, "zhStart": 175.75, "zhEnd": 180.0, "zhText": "“小白小黄回来了！”", "ruStart": 127.43, "ruEnd": 129.49, "ruText": "«Сяо Бай и Сяо Хуан вернулись!»"}, {"id": 21, "zhStart": 180.43, "zhEnd": 187.0, "zhText": "爷爷说着，很快地走到房子外边。", "ruStart": 132.63, "ruEnd": 135.63, "ruText": "Сказав это, дедушка быстро вышел из дома."}, {"id": 22, "zhStart": 187.09, "zhEnd": 196.0, "zhText": "我衣服都没穿，也很快地从床上跳了下来。", "ruStart": 137.71, "ruEnd": 141.47, "ruText": "Я даже не надел одежду и тоже быстро спрыгнул с кровати."}, {"id": 23, "zhStart": 196.44, "zhEnd": 205.0, "zhText": "啊！真的，小白和小黄就在我家的房子上，", "ruStart": 143.67, "ruEnd": 149.04, "ruText": "Ах! Правда, Сяо Бай и Сяо Хуан были прямо на крыше нашего дома,"}, {"id": 24, "zhStart": 205.6, "zhEnd": 215.0, "zhText": "一会儿飞来飞去，一会儿站下来，这里那里地看……", "ruStart": 151.43, "ruEnd": 155.1, "ruText": "То летали туда-сюда, то садились и смотрели по сторонам…"}, {"id": 25, "zhStart": 215.25, "zhEnd": 221.0, "zhText": "啊，小白小黄也想我们！", "ruStart": 157.12, "ruEnd": 160.49, "ruText": "Ах, Сяо Бай и Сяо Хуан тоже скучают по нам!"}, {"id": 26, "zhStart": 222.0, "zhEnd": 229.0, "zhText": "这一晚上，我们家的人都没有睡觉。", "ruStart": 162.55, "ruEnd": 165.87, "ruText": "В эту ночь никто из нашей семьи не спал."}, {"id": 27, "zhStart": 229.85, "zhEnd": 235.0, "zhText": "第二天，妈妈早早走进厨房，", "ruStart": 167.85, "ruEnd": 171.19, "ruText": "На следующий день мама рано утром вошла на кухню,"}, {"id": 28, "zhStart": 235.35, "zhEnd": 241.0, "zhText": "做了小白小黄最喜欢吃的东西，", "ruStart": 173.46, "ruEnd": 177.95, "ruText": "Приготовила то, что больше всего любят есть Сяо Бай и Сяо Хуан,"}, {"id": 29, "zhStart": 241.55, "zhEnd": 249.0, "zhText": "想让小白小黄吃完饭早一点回到雁队里去，", "ruStart": 180.15, "ruEnd": 184.25, "ruText": "Чтобы после еды Сяо Бай и Сяо Хуан пораньше вернулись в стаю,"}, {"id": 30, "zhStart": 249.75, "zhEnd": 255.0, "zhText": "因为，雁队就要接着往南飞了。", "ruStart": 185.95, "ruEnd": 189.95, "ruText": "Потому что стая вот-вот должна была продолжить полёт на юг."}, {"id": 31, "zhStart": 255.9, "zhEnd": 262.0, "zhText": "村子里的人听说小白小黄回来了，", "ruStart": 192.0, "ruEnd": 196.13, "ruText": "Люди в деревне услышали, что Сяо Бай и Сяо Хуан вернулись,"}, {"id": 32, "zhStart": 262.82, "zhEnd": 268.0, "zhText": "都来到我家，像欢迎客人一样。", "ruStart": 198.55, "ruEnd": 201.91, "ruText": "И все пришли к нам домой, словно приветствуя гостей."}, {"id": 33, "zhStart": 268.85, "zhEnd": 273.0, "zhText": "狗狗也带着他的狗来了。", "ruStart": 204.15, "ruEnd": 207.35, "ruText": "Гоугоу тоже пришёл, приведя с собой свою собаку."}, {"id": 34, "zhStart": 273.85, "zhEnd": 280.0, "zhText": "现在，狗狗已经是我的好朋友了。", "ruStart": 209.56, "ruEnd": 212.12, "ruText": "Теперь Гоугоу уже мой хороший друг."}, {"id": 35, "zhStart": 281.26, "zhEnd": 293.0, "zhText": "早饭后，我们全家和村子里的人再一次带着小白和小黄来到湿地，", "ruStart": 214.21, "ruEnd": 220.81, "ruText": "После завтрака вся наша семья и люди из деревни снова пришли на заболоченные земли вместе с Сяо Бай и Сяо Хуан,"}, {"id": 36, "zhStart": 293.6, "zhEnd": 300.44, "zhText": "雁队已经飞起来了，要飞往暖和的地方。", "ruStart": 223.21, "ruEnd": 226.65, "ruText": "Стая уже взлетела и собиралась лететь в тёплые места."}, {"id": 37, "zhStart": 302.0, "zhEnd": 308.0, "zhText": "雁队已经飞了很远很远，", "ruStart": 228.99, "ruEnd": 231.39, "ruText": "Стая уже улетела очень-очень далеко,"}, {"id": 38, "zhStart": 308.45, "zhEnd": 315.0, "zhText": "爷爷让小白小黄飞出去两次，", "ruStart": 233.87, "ruEnd": 237.27, "ruText": "Дедушка дважды попросил Сяо Бай и Сяо Хуан улететь,"}, {"id": 39, "zhStart": 315.42, "zhEnd": 325.0, "zhText": "可是小白小黄都是飞一飞又回到爷爷这儿。", "ruStart": 239.83, "ruEnd": 245.16, "ruText": "Но оба раза Сяо Бай и Сяо Хуан, немного полетав, возвращались обратно к дедушке."}, {"id": 40, "zhStart": 325.4, "zhEnd": 331.0, "zhText": "啊，小白小黄那么爱爷爷，", "ruStart": 246.97, "ruEnd": 251.05, "ruText": "Ах, Сяо Бай и Сяо Хуан так сильно любят дедушку,"}, {"id": 41, "zhStart": 331.75, "zhEnd": 337.0, "zhText": "爷爷和大雁再也不是死对头了！", "ruStart": 253.03, "ruEnd": 256.85, "ruText": "Дедушка и дикие гуси больше не смертельные враги!"}, {"id": 42, "zhStart": 338.15, "zhEnd": 344.19, "zhText": "见两只大雁又飞回来了，爷爷说：", "ruStart": 258.87, "ruEnd": 263.93, "ruText": "Увидев, что два диких гуся снова прилетели обратно, дедушка сказал:"}, {"id": 43, "zhStart": 344.92, "zhEnd": 356.0, "zhText": "“好孩子，走吧，到雁队里去。你们是最好的大雁，", "ruStart": 265.99, "ruEnd": 271.81, "ruText": "«Хорошие мои, летите, идите к стае. Вы самые лучшие дикие гуси,"}, {"id": 44, "zhStart": 356.35, "zhEnd": 363.0, "zhText": "你们要飞得高高的，远远的，", "ruStart": 273.91, "ruEnd": 277.92, "ruText": "Вы должны лететь высоко-высоко, далеко-далеко,"}, {"id": 45, "zhStart": 363.4, "zhEnd": 370.0, "zhText": "看见你们飞，我们才高兴！”", "ruStart": 280.03, "ruEnd": 283.03, "ruText": "Только увидев, как вы летите, мы будем рады!»"}, {"id": 46, "zhStart": 370.1, "zhEnd": 377.0, "zhText": "说完，爷爷又让小白小黄飞出去，", "ruStart": 285.64, "ruEnd": 290.55, "ruText": "Закончив говорить, дедушка снова попросил Сяо Бай и Сяо Хуан улететь,"}, {"id": 47, "zhStart": 377.85, "zhEnd": 383.0, "zhText": "两只大雁好像听懂了，", "ruStart": 292.75, "ruEnd": 295.19, "ruText": "Два диких гуся как будто поняли,"}, {"id": 48, "zhStart": 383.1, "zhEnd": 391.0, "zhText": "这一次，小白小黄一起飞走了。", "ruStart": 297.63, "ruEnd": 301.28, "ruText": "И на этот раз Сяо Бай и Сяо Хуан вместе улетели."}, {"id": 49, "zhStart": 391.4, "zhEnd": 397.0, "zhText": "“再见，小白小黄，我爱你们！”", "ruStart": 303.57, "ruEnd": 307.3, "ruText": "«До свидания, Сяо Бай и Сяо Хуан, я люблю вас!»"}, {"id": 50, "zhStart": 397.4, "zhEnd": 402.0, "zhText": "我对小白小黄说：", "ruStart": 309.55, "ruEnd": 312.23, "ruText": "Я сказал Сяо Бай и Сяо Хуан:"}, {"id": 51, "zhStart": 402.77, "zhEnd": 411.0, "zhText": "我知道，飞得再远，小白小黄也能听到。", "ruStart": 314.65, "ruEnd": 320.85, "ruText": "Я знаю, что, как бы далеко ни улетели Сяо Бай и Сяо Хуан, они всё равно смогут меня услышать."}];
+
+const CH6_UNITS = [{"id": 1, "zhText": "6. 这是国家二级保护动物。", "ruText": "Это животное, находящееся под государственной охраной второго уровня."}, {"id": 2, "zhText": "头雁伤得很重,", "ruText": "Вожак гусей ранен очень тяжело."}, {"id": 3, "zhText": "奶奶叫爷爷和我", "ruText": "Бабушка позвала дедушку и меня"}, {"id": 4, "zhText": "带它去北边一个大村子里的医院 找大夫。", "ruText": "отнести его в больницу в одной большой деревне на севере, найти врача."}, {"id": 5, "zhText": "正在医院里工作的是个男大夫,", "ruText": "В больнице работал мужчина-врач,"}, {"id": 6, "zhText": "他是刚从城市里的大医院来的,", "ruText": "он только что приехал из большой больницы в городе,"}, {"id": 7, "zhText": "要在这里工作一年给大家看病。", "ruText": "чтобы один год работать здесь и лечить всех."}, {"id": 8, "zhText": "我们一进去, 这个长得很高的大夫 就马上挺客气地说:", "ruText": "Как только мы вошли, этот очень высокий врач сразу очень вежливо сказал:"}, {"id": 9, "zhText": "\"请问你们两个谁生病了?", "ruText": "«Позвольте спросить, кто из вас двоих заболел?"}, {"id": 10, "zhText": "是不是小朋友感冒发烧了?\"", "ruText": "Неужели ребёнок простудился и у него температура?»"}, {"id": 11, "zhText": "爷爷说: \"不好意思,大夫,", "ruText": "Дедушка сказал: «Извините, доктор,"}, {"id": 12, "zhText": "我还不知道您贵姓, 请您看看这只大雁, 它伤得很重。\"", "ruText": "я ещё не знаю вашей почтенной фамилии, пожалуйста, посмотрите на этого гуся, он очень тяжело ранен»."}, {"id": 13, "zhText": "大夫笑了。 \"不客气,我姓房, 啊，就是房子的房。\"", "ruText": "Врач улыбнулся. «Не стоит, моя фамилия Фан, а, именно „Фан“ из слова „дом“."}, {"id": 14, "zhText": "房大夫看了看大雁的伤,说:", "ruText": "Доктор Фан посмотрел на рану гуся и сказал:"}, {"id": 15, "zhText": "\"对不起, 我这个医生不会给大雁看病, 我有点绝望了。\"", "ruText": "«Извините, я, этот врач, не умею лечить гусей, я немного в отчаянии»."}, {"id": 16, "zhText": "爷爷看着伤得很重的头雁,", "ruText": "Дедушка, глядя на тяжело раненого вожака гусей,"}, {"id": 17, "zhText": "慢慢地说起了头雁的故事。", "ruText": "медленно начал рассказывать историю вожака гусей."}, {"id": 18, "zhText": "听说头雁是因为一只小雁", "ruText": "Говорят, вожак гусей из-за одного маленького гуся"}, {"id": 19, "zhText": "才伤得这么重。", "ruText": "только поэтому был ранен настолько тяжело."}, {"id": 20, "zhText": "房大夫的眼睛有点红了, 眼睛里有了泪。", "ruText": "Глаза доктора Фана немного покраснели, в глазах появились слёзы."}, {"id": 21, "zhText": "他对爷爷说: \"真是只好雁啊, 我一定想办法帮助它。", "ruText": "Он сказал дедушке: «Действительно хороший гусь, я обязательно придумаю способ помочь ему."}, {"id": 22, "zhText": "这样吧, 我的女朋友是大学的老师,", "ruText": "Давайте так, моя девушка — преподаватель в университете,"}, {"id": 23, "zhText": "就是教学生给动物看病的,", "ruText": "именно учит студентов лечить животных,"}, {"id": 24, "zhText": "她可能有办法。\" 他看了看时间。", "ruText": "возможно, у неё есть способ». Он посмотрел на время."}, {"id": 25, "zhText": "\"两点一刻, 这会儿她应该没有上课。\"", "ruText": "«Два часа пятнадцать минут, сейчас она, должно быть, не ведёт урок»."}, {"id": 26, "zhText": "那时候还没有手机什么的,", "ruText": "В то время ещё не было мобильных телефонов и тому подобного,"}, {"id": 27, "zhText": "村子里只有一个", "ruText": "в деревне был только один"}, {"id": 28, "zhText": "看起来很大很重的电话。", "ruText": "телефон, выглядевший очень большим и тяжёлым."}, {"id": 29, "zhText": "房大夫很快地给女朋友打了个电话。", "ruText": "Доктор Фан быстро позвонил своей девушке."}, {"id": 30, "zhText": "\"喂,忙什么呢?\"他问。", "ruText": "«Алло, чем занимаешься?» — спросил он."}, {"id": 31, "zhText": "\"我正在休息, 刚才给三年级的学生用英文上了课,", "ruText": "«Я сейчас отдыхаю, только что провела урок ученикам третьего класса на английском,"}, {"id": 32, "zhText": "一会儿要到另一个教室", "ruText": "через некоторое время нужно пойти в другой класс"}, {"id": 33, "zhText": "给一年级的学生用汉语上课。", "ruText": "и провести урок ученикам первого класса на китайском языке."}, {"id": 34, "zhText": "从那么远的地方来电话,", "ruText": "Звонок пришёл из такого далёкого места,"}, {"id": 35, "zhText": "有什么事吗?\"", "ruText": "что случилось?»"}, {"id": 36, "zhText": "\"有一只大雁伤得很重,", "ruText": "«Есть один гусь, который очень тяжело ранен,"}, {"id": 37, "zhText": "想问问你有什么办法。\"", "ruText": "хочу спросить тебя, есть ли у тебя какой-нибудь способ»."}, {"id": 38, "zhText": "\"大雁?这有点难。", "ruText": "«Гусь? Это немного трудно."}, {"id": 39, "zhText": "要知道,大雁和大雁是不一样的。", "ruText": "Нужно знать, что гусь и гусь — не одинаковые."}, {"id": 40, "zhText": "你说的是一只什么大雁呢?\"", "ruText": "О каком именно гусе ты говоришь?»"}, {"id": 41, "zhText": "那时候村子里还没有电脑,", "ruText": "В то время в деревне ещё не было компьютеров,"}, {"id": 42, "zhText": "所以不能像现在一样", "ruText": "поэтому нельзя было, как сейчас,"}, {"id": 43, "zhText": "很快地让房大夫的女朋友", "ruText": "быстро позволить девушке доктора Фана"}, {"id": 44, "zhText": "用电脑看见大雁的照片。", "ruText": "увидеть фотографию гуся с помощью компьютера."}, {"id": 45, "zhText": "但是,上过大学的房大夫不怕,", "ruText": "Но доктор Фан, учившийся в университете, не испугался,"}, {"id": 46, "zhText": "他在电话里把头雁身体的大小,", "ruText": "он по телефону рассказал размер тела вожака гусей,"}, {"id": 47, "zhText": "哪些地方的羽毛是白的,", "ruText": "в каких местах перья белые,"}, {"id": 48, "zhText": "哪些地方的羽毛是黑的,", "ruText": "в каких местах перья чёрные,"}, {"id": 49, "zhText": "说得清清楚楚。", "ruText": "рассказал очень ясно и чётко."}, {"id": 50, "zhText": "他的女朋友听了,", "ruText": "Его девушка, выслушав,"}, {"id": 51, "zhText": "像看见了头雁的照片一样,", "ruText": "словно увидела фотографию вожака гусей,"}, {"id": 52, "zhText": "很快就知道了,说:", "ruText": "быстро поняла и сказала:"}, {"id": 53, "zhText": "\"我知道了, 这是一种国家二级保护动物,", "ruText": "«Я поняла, это один из видов животных, находящихся под государственной охраной второго уровня,"}, {"id": 54, "zhText": "你那里一定没有合适的药,", "ruText": "у вас там наверняка нет подходящего лекарства,"}, {"id": 55, "zhText": "因为那种药现在只有美国才有。", "ruText": "потому что такое лекарство сейчас есть только в Америке."}, {"id": 56, "zhText": "不过,这事很好办,", "ruText": "Однако это дело легко решить,"}, {"id": 57, "zhText": "一些没有这种药的国家", "ruText": "некоторые страны, где нет такого лекарства,"}, {"id": 58, "zhText": "差不多都给这种大雁用过人的药,", "ruText": "почти все давали этому виду гусей человеческое лекарство,"}, {"id": 59, "zhText": "你也可以给它试试。\"", "ruText": "ты тоже можешь попробовать дать ему»."}, {"id": 60, "zhText": "我和爷爷不知道什么是国家二级保护动物,", "ruText": "Мы с дедушкой не знали, что такое животное под государственной охраной второго уровня,"}, {"id": 61, "zhText": "但是听着这几个词,", "ruText": "но, слушая эти несколько слов,"}, {"id": 62, "zhText": "我们好像开始懂了些什么。", "ruText": "мы, кажется, начали что-то понимать."}, {"id": 63, "zhText": "房大夫照他女朋友说的办法,", "ruText": "Доктор Фан согласно способу, который сказала его девушка,"}, {"id": 64, "zhText": "试着给头雁洗了伤,上了药,", "ruText": "попробовал промыть рану вожака гусей и нанёс лекарство,"}, {"id": 65, "zhText": "头雁看起来舒服多了,", "ruText": "вожак гусей выглядел намного более комфортно,"}, {"id": 66, "zhText": "但是房大夫的衬衫和裤子都红了。", "ruText": "но рубашка и брюки доктора Фана все стали красными."}, {"id": 67, "zhText": "爷爷说: \"真对不起, 你的衣服让我们拿回去洗一洗吧。\"", "ruText": "Дедушка сказал: «Мне действительно очень неловко, давайте мы заберём вашу одежду и постираем её»."}, {"id": 68, "zhText": "\"不用,不用,不客气, 能帮助这只不怕鹰的大雁, 我很高兴。\"", "ruText": "«Не надо, не надо, не стоит, я очень рад, что могу помочь этому гусю, который не боится орлов»."}, {"id": 69, "zhText": "看得出来,房大夫说的是真话。", "ruText": "Было видно, что доктор Фан говорил правду."}, {"id": 70, "zhText": "\"啊,那就谢谢你, 也谢谢你的女朋友了。\"", "ruText": "«А, тогда спасибо тебе, и также спасибо твоей девушке»."}, {"id": 71, "zhText": "爷爷说的也是真话。", "ruText": "Дедушка тоже говорил правду."}, {"id": 72, "zhText": "我看出来了,现在爷爷已经像爱我一样爱这只头雁了。", "ruText": "Я понял, теперь дедушка уже любит этого вожака гусей так же, как любит меня."}];
+
+const CHAPTERS = [
+  { id:'ch1', label:'Глава 1', zhSrc:'BOOK/01/01.mp3', ruSrc:'BOOK/01/01_rus.mp3', units: CH1_UNITS },
+  { id:'ch2', label:'2', zhSrc:'BOOK/02/02.mp3', ruSrc:'BOOK/02/02_rus.mp3', units: CH2_UNITS },
+  { id:'ch3', label:'3', zhSrc:'BOOK/03/03.mp3', ruSrc:'BOOK/03/03_rus.mp3', units: CH3_UNITS },
+  { id:'ch4', label:'4', zhSrc:'BOOK/04/04.mp3', ruSrc:'BOOK/04/04_rus.mp3', units: CH4_UNITS },
+  { id:'ch5', label:'5', zhSrc:'BOOK/05/05.mp3', ruSrc:'BOOK/05/05_rus.mp3', units: CH5_UNITS },
+  { id:'ch6', label:'6', zhSrc:'BOOK/06/06.mp3', ruSrc:'BOOK/06/06_rus.mp3', units: CH6_UNITS },
+  { id:'ch7', label:'7', zhSrc:'BOOK/07/07.mp3', ruSrc:'BOOK/07/07_rus.mp3', units: CH7_UNITS },
+  { id:'ch8', label:'8', zhSrc:'BOOK/08/08.mp3', ruSrc:'BOOK/08/08_rus.mp3', units: CH8_UNITS },
+  { id:'ch9', label:'9', zhSrc:'BOOK/09/09.mp3', ruSrc:'BOOK/09/09_rus.mp3', units: CH9_UNITS },
+  { id:'ch10', label:'10', zhSrc:'BOOK/10/10.mp3', ruSrc:'BOOK/10/10_rus.mp3', units: CH10_UNITS },
+];
+const STATE_KEY = 'looperkit-dayan-state-v1';
+function readSavedState(){
+  try { return JSON.parse(localStorage.getItem(STATE_KEY)) || {}; }
+  catch (_) { return {}; }
+}
+const savedState = readSavedState();
+let chapterIdx = Number.isInteger(savedState.chapterIdx) && savedState.chapterIdx >= 0 && savedState.chapterIdx < CHAPTERS.length
+  ? savedState.chapterIdx : 0;
+let UNITS = CHAPTERS[chapterIdx].units;
+
+const zhAudio = document.getElementById('zhAudio');
+const ruAudio = document.getElementById('ruAudio');
+const statusLine = document.getElementById('statusLine');
+const progressLabel = document.getElementById('progressLabel');
+const waveform = document.getElementById('waveform');
+const fileWarning = document.getElementById('fileWarning');
+const speedSelect = document.getElementById('speedSelect');
+const repeatSelect = document.getElementById('repeatSelect');
+
+const translateBtn = document.getElementById('translateBtn');
+const translatePinyin = document.getElementById('translatePinyin');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseLabel = document.getElementById('pauseLabel');
+const pausePinyin = document.getElementById('pausePinyin');
+const sentenceText = document.getElementById('sentenceText');
+const bookmarkBtn = document.getElementById('bookmarkBtn');
+const bookmarksBtn = document.getElementById('bookmarksBtn');
+const bookmarkList = document.getElementById('bookmarkList');
+
+const tabsEl = document.getElementById('tabs');
+const unitSlider = document.getElementById('unitSlider');
+const volumeSlider = document.getElementById('volumeSlider');
+const volumeValue = document.getElementById('volumeValue');
+const fwFiles = document.getElementById('fwFiles');
+
+let idx = Number.isInteger(savedState.idx) && savedState.idx >= 0 && savedState.idx < UNITS.length ? savedState.idx : 0;
+let mode = 'zh'; // 'zh' | 'ru'
+let paused = false;
+let zhLoopHandler = null;
+let ruEndHandler = null;
+let repeatCompleted = 0;
+let bookmarks = Array.isArray(savedState.bookmarks) ? savedState.bookmarks : [];
+
+if ([...speedSelect.options].some(o => o.value === String(savedState.speed))) speedSelect.value = String(savedState.speed);
+if (Number.isFinite(savedState.volume)) volumeSlider.value = Math.max(0, Math.min(100, savedState.volume));
+if ([...repeatSelect.options].some(o => o.value === String(savedState.repeat))) repeatSelect.value = String(savedState.repeat);
+
+function saveState(){
+  localStorage.setItem(STATE_KEY, JSON.stringify({
+    chapterIdx, idx, speed: speedSelect.value, volume: Number(volumeSlider.value), repeat: repeatSelect.value, bookmarks
+  }));
+}
+
+function currentBookmarkIndex(){ return bookmarks.findIndex(b => b.chapterIdx === chapterIdx && b.idx === idx); }
+function updateBookmarkButton(){ bookmarkBtn.textContent = currentBookmarkIndex() === -1 ? 'Закладка' : 'В закладках'; }
+function renderBookmarks(){
+  bookmarkList.innerHTML = '';
+  if (!bookmarks.length) { bookmarkList.innerHTML = '<div class="bookmark-empty">Закладок пока нет.</div>'; return; }
+  bookmarks.forEach((b, bookmarkIdx) => {
+    const item = document.createElement('div'); item.className = 'bookmark-item';
+    const jump = document.createElement('button'); jump.className = 'btn-ghost bookmark-jump';
+    jump.textContent = `Глава ${b.chapterIdx + 1} · фраза ${b.idx + 1}`;
+    jump.addEventListener('click', () => { switchChapter(b.chapterIdx, b.idx); bookmarkList.classList.remove('open'); });
+    const remove = document.createElement('button'); remove.className = 'btn-ghost bookmark-remove'; remove.textContent = '×'; remove.title = 'Удалить закладку';
+    remove.addEventListener('click', () => { bookmarks.splice(bookmarkIdx, 1); saveState(); renderBookmarks(); updateBookmarkButton(); });
+    item.append(jump, remove); bookmarkList.appendChild(item);
+  });
+}
+function toggleBookmark(){
+  const found = currentBookmarkIndex();
+  if (found === -1) bookmarks.push({ chapterIdx, idx }); else bookmarks.splice(found, 1);
+  saveState(); renderBookmarks(); updateBookmarkButton();
+}
+
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  CHAPTERS.forEach((ch, i) => {
+    const b = document.createElement('button');
+    b.className = 'tab-btn' + (i === chapterIdx ? ' active' : '');
+    b.textContent = ch.label;
+    b.addEventListener('click', () => switchChapter(i));
+    tabsEl.appendChild(b);
+  });
+}
+
+function switchChapter(newChapterIdx, newIdx = 0){
+  if(newChapterIdx === chapterIdx && newIdx === idx) return;
+  clearHandlers();
+  zhAudio.pause();
+  ruAudio.pause();
+  fileWarning.style.display = 'none';
+  chapterIdx = newChapterIdx;
+  UNITS = CHAPTERS[chapterIdx].units;
+  zhAudio.src = CHAPTERS[chapterIdx].zhSrc;
+  ruAudio.src = CHAPTERS[chapterIdx].ruSrc;
+  idx = Math.max(0, Math.min(newIdx, UNITS.length - 1));
+  renderTabs();
+  updateProgress();
+  updateBookmarkButton();
+  playZhLoop();
+}
+
+function showFileWarning(){
+  fwFiles.textContent = CHAPTERS[chapterIdx].zhSrc + ' / ' + CHAPTERS[chapterIdx].ruSrc;
+  fileWarning.classList.remove('expanded');
+  fileWarning.style.display = 'block';
+}
+
+fileWarning.addEventListener('click', ()=>{
+  fileWarning.classList.toggle('expanded');
+});
+
+// build waveform bars
+const BAR_COUNT = 28;
+for(let i=0;i<BAR_COUNT;i++){
+  const b = document.createElement('div');
+  b.className = 'bar';
+  waveform.appendChild(b);
+}
+const bars = Array.from(waveform.children);
+let waveTimer = null;
+
+function startWaveAnim(cls){
+  stopWaveAnim();
+  // Интервал увеличен со 140мс до 400мс — на слабых/старых Android
+  // частое обновление DOM у 28 элементов каждые 140мс создавало
+  // лишнюю нагрузку на главный поток и могло способствовать
+  // подвисаниям во время воспроизведения.
+  waveTimer = setInterval(()=>{
+    bars.forEach(b=>{
+      const h = 6 + Math.random()*40;
+      b.style.height = h+'px';
+      b.classList.add('active');
+      b.classList.toggle('ru', cls==='ru');
+    });
+  }, 400);
+}
+function stopWaveAnim(){
+  if(waveTimer){ clearInterval(waveTimer); waveTimer = null; }
+  bars.forEach(b=>{ b.style.height='8px'; b.classList.remove('active'); });
+}
+
+function clearHandlers(){
+  if(zhLoopHandler){ zhAudio.removeEventListener('timeupdate', zhLoopHandler); zhLoopHandler = null; }
+  if(ruEndHandler){ ruAudio.removeEventListener('timeupdate', ruEndHandler); ruEndHandler = null; }
+}
+
+function updateProgress(){
+  progressLabel.textContent = `Предложение ${idx+1} / ${UNITS.length}`;
+  unitSlider.min = 1;
+  unitSlider.max = UNITS.length;
+  unitSlider.value = idx+1;
+  saveState();
+}
+
+function setPauseUI(){
+  pauseLabel.textContent = paused ? '播放' : '暂停';
+  pausePinyin.textContent = paused ? 'bōfàng' : 'zàntíng';
+}
+
+function playZhLoop(){
+  clearHandlers();
+  mode = 'zh';
+  paused = false;
+  setPauseUI();
+  const u = UNITS[idx];
+  repeatCompleted = 0;
+  sentenceText.textContent = u.zhText;
+  sentenceText.className = 'sentence';
+  statusLine.textContent = 'Играет по кругу — нажмите «ДАЛЬШЕ», когда разберёте фразу';
+  translateBtn.disabled = (u.ruStart === null);
+  zhAudio.pause();
+  ruAudio.pause();
+  zhAudio.playbackRate = parseFloat(speedSelect.value);
+  zhAudio.currentTime = u.zhStart;
+  zhAudio.play().then(()=> startWaveAnim('zh')).catch(err=>{
+    if(err && err.name !== 'NotAllowedError') showFileWarning();
+  });
+
+  zhLoopHandler = () => {
+    if(zhAudio.currentTime >= u.zhEnd - 0.02){
+      const target = repeatSelect.value === 'Infinity' ? Infinity : Number(repeatSelect.value);
+      if (repeatCompleted + 1 >= target) {
+        if (idx < UNITS.length - 1) {
+          goTo(idx + 1);
+        } else {
+          zhAudio.pause();
+          paused = true;
+          stopWaveAnim();
+          playBoundarySound('end');
+          statusLine.textContent = 'Глава завершена';
+          setPauseUI();
+        }
+        return;
+      }
+      repeatCompleted++;
+      zhAudio.currentTime = u.zhStart;
+      if(!paused) zhAudio.play().catch(()=>{});
+    }
+  };
+  zhAudio.addEventListener('timeupdate', zhLoopHandler);
+}
+
+function playTranslationOnce(){
+  const u = UNITS[idx];
+  // Новые соответствия китайской и русской озвучки будут добавлены отдельно.
+  if(u.ruStart == null || u.ruEnd == null) return;
+  clearHandlers();
+  mode = 'ru';
+  paused = false;
+  setPauseUI();
+  sentenceText.textContent = u.ruText || '';
+  sentenceText.className = 'sentence ru-mode';
+  statusLine.textContent = 'Слушаем перевод один раз, затем снова китайский';
+  zhAudio.pause();
+  ruAudio.playbackRate = 1;
+  ruAudio.currentTime = u.ruStart;
+  ruAudio.play().catch(()=>{ showFileWarning(); });
+  startWaveAnim('ru');
+
+  ruEndHandler = () => {
+    if(ruAudio.currentTime >= u.ruEnd - 0.02){
+      ruAudio.pause();
+      clearHandlers();
+      playZhLoop();
+    }
+  };
+  ruAudio.addEventListener('timeupdate', ruEndHandler);
+}
+
+function togglePause(){
+  const activeAudio = (mode==='zh') ? zhAudio : ruAudio;
+  if(!paused){
+    activeAudio.pause();
+    paused = true;
+    stopWaveAnim();
+    statusLine.textContent = 'На паузе';
+  } else {
+    activeAudio.play().catch(()=>{});
+    paused = false;
+    startWaveAnim(mode);
+    statusLine.textContent = (mode==='zh')
+      ? 'Играет по кругу — нажмите «ДАЛЬШЕ», когда разберёте фразу'
+      : 'Слушаем перевод один раз, затем снова китайский';
+  }
+  setPauseUI();
+}
+
+function goTo(newIdx){
+  if(newIdx < 0 || newIdx >= UNITS.length){
+    playBoundarySound(newIdx < 0 ? 'start' : 'end');
+    statusLine.textContent = newIdx < 0 ? 'Это первая фраза главы' : 'Это последняя фраза главы';
+    return;
+  }
+  idx = newIdx;
+  updateProgress();
+  updateBookmarkButton();
+  playZhLoop();
+}
+
+let soundContext = null;
+function playBoundarySound(kind){
+  const AudioCtor = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtor) return;
+  try {
+    soundContext ||= new AudioCtor();
+    if (soundContext.state === 'suspended') soundContext.resume();
+    const osc = soundContext.createOscillator();
+    const gain = soundContext.createGain();
+    osc.frequency.value = kind === 'end' ? 660 : 440;
+    gain.gain.setValueAtTime(0.0001, soundContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.12, soundContext.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, soundContext.currentTime + 0.13);
+    osc.connect(gain).connect(soundContext.destination);
+    osc.start(); osc.stop(soundContext.currentTime + 0.14);
+  } catch (_) {}
+}
+
+function flashPinyin(el){
+  if(!el) return;
+  el.classList.add('show');
+  clearTimeout(el._pinyinTimer);
+  el._pinyinTimer = setTimeout(()=> el.classList.remove('show'), 800);
+}
+
+nextBtn.addEventListener('click', ()=> goTo(idx+1));
+prevBtn.addEventListener('click', ()=> goTo(idx-1));
+translateBtn.addEventListener('click', playTranslationOnce);
+translateBtn.addEventListener('click', ()=> flashPinyin(translatePinyin));
+pauseBtn.addEventListener('click', ()=> flashPinyin(pausePinyin));
+unitSlider.addEventListener('input', ()=>{
+  const newIdx = parseInt(unitSlider.value, 10) - 1;
+  if(newIdx !== idx) goTo(newIdx);
+});
+volumeSlider.addEventListener('input', ()=>{
+  const vol = parseInt(volumeSlider.value, 10) / 100;
+  zhAudio.volume = vol;
+  ruAudio.volume = vol;
+  volumeValue.textContent = volumeSlider.value + '%';
+  saveState();
+});
+pauseBtn.addEventListener('click', togglePause);
+bookmarkBtn.addEventListener('click', toggleBookmark);
+bookmarksBtn.addEventListener('click', ()=> bookmarkList.classList.toggle('open'));
+
+speedSelect.addEventListener('change', ()=>{
+  if(mode==='zh') zhAudio.playbackRate = parseFloat(speedSelect.value);
+  saveState();
+});
+repeatSelect.addEventListener('change', saveState);
+
+document.addEventListener('keydown', (e)=>{
+  if(['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+  if(e.code === 'Space'){ e.preventDefault(); goTo(idx+1); }
+  else if(e.key === 't' || e.key === 'T'){ playTranslationOnce(); }
+  else if(e.key === 'p' || e.key === 'P' || e.key === 'Enter'){ e.preventDefault(); togglePause(); }
+  else if(e.key === 'ArrowRight'){ goTo(idx+1); }
+  else if(e.key === 'ArrowLeft'){ goTo(idx-1); }
+});
+
+zhAudio.addEventListener('error', ()=>{ showFileWarning(); });
+ruAudio.addEventListener('error', ()=>{ showFileWarning(); });
+
+zhAudio.src = CHAPTERS[chapterIdx].zhSrc;
+ruAudio.src = CHAPTERS[chapterIdx].ruSrc;
+renderTabs();
+updateProgress();
+volumeSlider.dispatchEvent(new Event('input'));
+renderBookmarks();
+updateBookmarkButton();
+playZhLoop();
+
+// ========================================
+// УПРАВЛЕНИЕ С НАУШНИКОВ (MediaSession)
+// NEXTTRACK     -> "дальше" (следующая фраза)
+// PREVIOUSTRACK -> "перевод"
+// PLAY/PAUSE    -> пауза/продолжить
+// ========================================
+if ('mediaSession' in navigator) {
+  navigator.mediaSession.setActionHandler('nexttrack', () => {
+    goTo(idx + 1);
+  });
+
+  navigator.mediaSession.setActionHandler('previoustrack', () => {
+    playTranslationOnce();
+  });
+
+  navigator.mediaSession.setActionHandler('play', () => {
+    if (paused) togglePause();
+  });
+
+  navigator.mediaSession.setActionHandler('pause', () => {
+    if (!paused) togglePause();
+  });
+
+  navigator.mediaSession.setActionHandler('stop', () => {
+    zhAudio.pause();
+    ruAudio.pause();
+  });
+}
+
+// ========================================
+// ГОЛОСОВОЕ УПРАВЛЕНИЕ ЧЕРЕЗ МИКРОФОН AIRPODS
+// «дальше» -> кнопка "Дальше"
+// «как»    -> кнопка "Не понял — перевод"
+//
+// ВАЖНО: браузер разрешает запуск распознавания речи
+// только по нажатию кнопки (пользовательский жест).
+// Поэтому нужно один раз нажать "Голос", чтобы включить —
+// дальше распознавание само перезапускается после каждой
+// команды, руки больше не нужны.
+//
+// ДИАГНОСТИКА: на старых Android микрофон может "приглушать"
+// (audio ducking) или прерывать воспроизведение <audio>, пока
+// распознавание активно и постоянно перезапускается. Чтобы
+// проверить, не в этом ли причина зависаний/пропадания звука,
+// временно выключите голосовое управление флагом ниже —
+// кнопка "Голос" останется на экране, но будет неактивна.
+// Когда протестируете и убедитесь, что дело не в этом (или
+// наоборот — в этом), верните VOICE_ENABLED = true.
+// ========================================
+const VOICE_ENABLED = false; // <-- поставьте true, чтобы снова включить голосовое управление
+(() => {
+  const voiceBtn = document.getElementById('voiceBtn');
+  const voiceStatus = document.getElementById('voiceStatus');
+  const voiceHeard = document.getElementById('voiceHeard');
+  if (!voiceBtn || !voiceStatus || !voiceHeard) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!VOICE_ENABLED) {
+    voiceBtn.disabled = true;
+    voiceBtn.textContent = 'Голос: выключено (тест)';
+    voiceStatus.textContent = 'Голосовое управление временно отключено для диагностики зависаний.';
+    return;
+  }
+
+  if (!SR) {
+    voiceBtn.disabled = true;
+    voiceBtn.textContent = 'Голос: недоступно';
+    voiceStatus.textContent = 'Этот браузер не поддерживает распознавание речи (нужен Safari/Chrome).';
+    return;
+  }
+
+  const recognition = new SR();
+  recognition.lang = 'ru-RU';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  let voiceActive = false;
+
+  recognition.onresult = (ev) => {
+    const t = ev.results[0][0].transcript.trim();
+    const l = t.toLowerCase();
+    voiceHeard.textContent = 'Услышано: ' + t;
+
+    if (l.includes('дальше')) {
+      voiceStatus.textContent = 'Команда: ДАЛЬШЕ ✅';
+      goTo(idx + 1);
+    } else if (l.includes('как')) {
+      voiceStatus.textContent = 'Команда: ПЕРЕВОД 🇷🇺';
+      playTranslationOnce();
+    } else {
+      voiceStatus.textContent = 'Не распознано: «' + t + '» (скажи «дальше» или «как»)';
+    }
+  };
+
+  recognition.onerror = (ev) => {
+    voiceStatus.textContent = 'Ошибка распознавания: ' + ev.error;
+  };
+
+  recognition.onend = () => {
+    if (voiceActive) {
+      // Автоматически перезапускаем прослушивание, чтобы не нажимать кнопку каждый раз
+      try { recognition.start(); } catch (x) {}
+    } else {
+      voiceBtn.textContent = 'Голос: выкл';
+      voiceBtn.classList.remove('active');
+    }
+  };
+
+  voiceBtn.addEventListener('click', () => {
+    voiceActive = !voiceActive;
+    if (voiceActive) {
+      voiceBtn.textContent = 'Голос: вкл';
+      voiceStatus.textContent = 'Слушаю команды: «дальше» / «как»';
+      try { recognition.start(); } catch (x) {}
+    } else {
+      voiceStatus.textContent = 'Голосовое управление выключено';
+      try { recognition.stop(); } catch (x) {}
+    }
+  });
+})();
+</script>
+
+<script>
+// ========================================
+// ЧИСТО ВИЗУАЛЬНЫЕ ДОПОЛНЕНИЯ (не влияют на функционал):
+// — заливка ползунков цветом до текущего значения
+// — подсветка кнопки "Голос" когда распознавание активно
+// ========================================
+(() => {
+  const unitSlider = document.getElementById('unitSlider');
+  const volumeSlider = document.getElementById('volumeSlider');
+  const voiceBtn = document.getElementById('voiceBtn');
+
+  function syncFill(el, varName){
+    if(!el) return;
+    const min = parseFloat(el.min) || 0;
+    const max = parseFloat(el.max) || 100;
+    const val = parseFloat(el.value) || 0;
+    const pct = max > min ? ((val - min) / (max - min)) * 100 : 0;
+    el.style.setProperty(varName, pct + '%');
+  }
+
+  if(volumeSlider){
+    syncFill(volumeSlider, '--vfill');
+    volumeSlider.addEventListener('input', () => syncFill(volumeSlider, '--vfill'));
+  }
+
+  if(unitSlider){
+    syncFill(unitSlider, '--fill');
+    unitSlider.addEventListener('input', () => syncFill(unitSlider, '--fill'));
+    // unitSlider.value также меняется программно (не через input-события),
+    // поэтому подстраховываемся периодической синхронизацией.
+    // Интервал увеличен с 200мс до 500мс для снижения нагрузки на
+    // главный поток на слабых/старых Android-устройствах.
+    setInterval(() => syncFill(unitSlider, '--fill'), 500);
+  }
+
+  if(voiceBtn){
+    const updateActive = () => {
+      const on = voiceBtn.textContent.includes('вкл') && !voiceBtn.textContent.includes('выкл');
+      voiceBtn.classList.toggle('active', on);
+    };
+    updateActive();
+    new MutationObserver(updateActive).observe(voiceBtn, { childList:true, characterData:true, subtree:true });
+  }
+})();
+</script>
+</body>
+</html>
