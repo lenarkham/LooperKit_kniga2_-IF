@@ -1043,8 +1043,18 @@ function playZhLoop(){
     if(err && err.name !== 'NotAllowedError') showFileWarning();
   });
 
+  let boundaryLock = false; // защита от повторного срабатывания timeupdate на границе фразы
   zhLoopHandler = () => {
+    if(boundaryLock) return;
     if(spec.audio.currentTime >= u[spec.endKey] - 0.02){
+      boundaryLock = true;
+      // Сразу уводим currentTime за порог: если после pause() браузер всё же
+      // пришлёт ещё один timeupdate (currentTime ещё >= endKey), это раньше
+      // приводило к повторному входу в обработчик и лишнему инкременту
+      // repeatCompleted — именно из-за этого счётчик "через N повторов"
+      // в режиме инверсии сбивался и китайский либо не вставлялся, либо
+      // вставлялся не там.
+      spec.audio.currentTime = u[spec.startKey];
       const target = repeatSelect.value === 'Infinity' ? Infinity : Number(repeatSelect.value);
       repeatCompleted++;
       const reachedTarget = repeatCompleted >= target;
@@ -1055,6 +1065,7 @@ function playZhLoop(){
         spec.audio.pause();
         stopWaveAnim();
         playAutoTranslationOnce(u, () => {
+          boundaryLock = false;
           if (reachedTarget) {
             if (idx < UNITS.length - 1) {
               goTo(idx + 1);
@@ -1085,7 +1096,7 @@ function playZhLoop(){
         }
         return;
       }
-      spec.audio.currentTime = u[spec.startKey];
+      boundaryLock = false;
       if(!paused) spec.audio.play().catch(()=>{});
     }
   };
