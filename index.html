@@ -74,7 +74,7 @@
     margin:0;
     max-width:58%;
     text-align:right;
-    font-size:13px;
+    font-size:20px;
     color:var(--muted);
   }
   .nav-small{
@@ -578,10 +578,66 @@
     display:block;
   }
 
+  .invert-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin:16px auto 0;
+  }
+  .btn-invert{
+    padding:6px 16px;
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:.02em;
+    color:var(--muted-2);
+    background:transparent;
+    border:1px solid var(--border-soft);
+    border-radius:20px;
+    cursor:pointer;
+    opacity:.55;
+    transition:opacity .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .btn-invert:hover{
+    opacity:1;
+    color:var(--muted);
+    border-color:var(--border);
+  }
+  .btn-invert.active{
+    color:var(--violet-2);
+    border-color:rgba(56,189,248,.3);
+    opacity:.85;
+  }
+  .invert-every-select{
+    padding:5px 10px;
+    font-size:11px;
+    border-radius:14px;
+    color:var(--muted-2);
+    background:transparent;
+    border:1px solid var(--border-soft);
+    opacity:.55;
+    cursor:pointer;
+    transition:opacity .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .invert-every-select:not(:disabled):hover{
+    opacity:1;
+    color:var(--muted);
+    border-color:var(--border);
+  }
+  .invert-every-select:disabled{
+    opacity:.3;
+    cursor:not-allowed;
+  }
+  .invert-every-select.active{
+    color:var(--violet-2);
+    border-color:rgba(56,189,248,.3);
+    opacity:.85;
+  }
+
   @media (max-width:480px){
     .sentence{font-size:24px;}
     .top-row{flex-direction:row; align-items:flex-start;}
-    .book-title{max-width:62%; font-size:12px;}
+    .book-title{max-width:62%; font-size:18px;}
     .tab-btn{width:38px;}
   }
 </style>
@@ -649,6 +705,17 @@
       <option value="Infinity" selected>∞</option>
     </select>
   </div>
+</div>
+
+<div class="invert-row">
+  <button class="btn-invert" id="invertBtn" title="Поменять местами: сначала русский, перевод — китайский">Инверсия</button>
+  <select class="invert-every-select" id="invertRepeatSelect" title="Только в режиме инверсии: через сколько повторов русской фразы один раз включать китайский">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3" selected>3</option>
+    <option value="5">5</option>
+    <option value="10">10</option>
+  </select>
 </div>
 
 <div class="file-warning" id="fileWarning">
@@ -736,10 +803,16 @@ const unitSlider = document.getElementById('unitSlider');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeValue = document.getElementById('volumeValue');
 const fwFiles = document.getElementById('fwFiles');
+const invertBtn = document.getElementById('invertBtn');
+const invertRepeatSelect = document.getElementById('invertRepeatSelect');
 
 let idx = Number.isInteger(savedState.idx) && savedState.idx >= 0 && savedState.idx < UNITS.length ? savedState.idx : 0;
 let mode = 'zh'; // 'zh' | 'ru'
 let paused = false;
+// inverted=false (по умолчанию): по кругу играет китайский, кнопка "перевод" один раз включает русский.
+// inverted=true (кнопка "Инверсия"): по кругу играет русский, кнопка "перевод" один раз включает китайский.
+let inverted = savedState.inverted === true;
+let autoTranslateHandler = null; // отдельный timeupdate-обработчик для автоматической вставки перевода (только режим инверсии)
 let zhLoopHandler = null;
 let ruEndHandler = null;
 let repeatCompleted = 0;
@@ -748,10 +821,11 @@ let bookmarks = Array.isArray(savedState.bookmarks) ? savedState.bookmarks : [];
 if ([...speedSelect.options].some(o => o.value === String(savedState.speed))) speedSelect.value = String(savedState.speed);
 if (Number.isFinite(savedState.volume)) volumeSlider.value = Math.max(0, Math.min(100, savedState.volume));
 if ([...repeatSelect.options].some(o => o.value === String(savedState.repeat))) repeatSelect.value = String(savedState.repeat);
+if ([...invertRepeatSelect.options].some(o => o.value === String(savedState.invertEvery))) invertRepeatSelect.value = String(savedState.invertEvery);
 
 function saveState(){
   localStorage.setItem(STATE_KEY, JSON.stringify({
-    chapterIdx, idx, speed: speedSelect.value, volume: Number(volumeSlider.value), repeat: repeatSelect.value, bookmarks
+    chapterIdx, idx, speed: speedSelect.value, volume: Number(volumeSlider.value), repeat: repeatSelect.value, bookmarks, inverted, invertEvery: invertRepeatSelect.value
   }));
 }
 
@@ -845,8 +919,11 @@ function stopWaveAnim(){
 }
 
 function clearHandlers(){
-  if(zhLoopHandler){ zhAudio.removeEventListener('timeupdate', zhLoopHandler); zhLoopHandler = null; }
-  if(ruEndHandler){ ruAudio.removeEventListener('timeupdate', ruEndHandler); ruEndHandler = null; }
+  // При инверсии цикл/перевод может быть навешен на любой из двух audio,
+  // поэтому снимаем обработчик с обоих — на "чужом" элементе это безопасный no-op.
+  if(zhLoopHandler){ zhAudio.removeEventListener('timeupdate', zhLoopHandler); ruAudio.removeEventListener('timeupdate', zhLoopHandler); zhLoopHandler = null; }
+  if(ruEndHandler){ zhAudio.removeEventListener('timeupdate', ruEndHandler); ruAudio.removeEventListener('timeupdate', ruEndHandler); ruEndHandler = null; }
+  if(autoTranslateHandler){ zhAudio.removeEventListener('timeupdate', autoTranslateHandler); ruAudio.removeEventListener('timeupdate', autoTranslateHandler); autoTranslateHandler = null; }
 }
 
 function updateProgress(){
@@ -862,33 +939,144 @@ function setPauseUI(){
   pausePinyin.textContent = paused ? 'bōfàng' : 'zàntíng';
 }
 
+// Возвращает настройки для "циклического" языка (тот, что играет по кругу).
+// Обычно это китайский; при inverted=true — русский.
+function loopSpec(){
+  return inverted
+    ? { audio: ruAudio, startKey:'ruStart', endKey:'ruEnd', textKey:'ruText', cls:'sentence ru-mode', rate:1, mode:'ru' }
+    : { audio: zhAudio, startKey:'zhStart', endKey:'zhEnd', textKey:'zhText', cls:'sentence', rate:parseFloat(speedSelect.value), mode:'zh' };
+}
+// Настройки для языка "перевода" (включается кнопкой "翻译" один раз, а в режиме
+// инверсии — ещё и автоматически, каждые N повторов основного цикла).
+// Обычно это русский; при inverted=true — китайский.
+function onceSpec(){
+  return inverted
+    ? { audio: zhAudio, startKey:'zhStart', endKey:'zhEnd', textKey:'zhText', cls:'sentence', rate:parseFloat(speedSelect.value), mode:'zh',
+        statusText:'Слушаем китайский один раз, затем снова русский' }
+    : { audio: ruAudio, startKey:'ruStart', endKey:'ruEnd', textKey:'ruText', cls:'sentence ru-mode', rate:1, mode:'ru',
+        statusText:'Слушаем перевод один раз, затем снова китайский' };
+}
+
+// Порог "каждые N повторов" для автоматической вставки перевода — работает только
+// в режиме инверсии. Возвращает null, если инверсия выключена.
+function getInvertEveryN(){
+  if(!inverted) return null;
+  const v = Number(invertRepeatSelect.value);
+  return Number.isFinite(v) && v > 0 ? v : null;
+}
+
+// Ограничивает варианты нового селекта числом повторов, выбранным в "Повтор":
+// нельзя выбрать N больше, чем реально произойдёт повторов фразы.
+function updateInvertRepeatOptions(){
+  const target = repeatSelect.value === 'Infinity' ? Infinity : Number(repeatSelect.value);
+  const options = [...invertRepeatSelect.options];
+  options.forEach(opt => { opt.disabled = Number(opt.value) > target; });
+  if (Number(invertRepeatSelect.value) > target) {
+    const allowed = options.filter(o => !o.disabled);
+    if (allowed.length) invertRepeatSelect.value = allowed[allowed.length - 1].value;
+  }
+}
+
+// Проигрывает "перевод" один раз и вызывает onDone() по завершении.
+// В отличие от ручной кнопки "翻译", не трогает repeatCompleted и не привязана
+// жёстко к playZhLoop — вызывающий сам решает, что делать дальше.
+function playAutoTranslationOnce(u, onDone){
+  const spec = onceSpec();
+  if (u[spec.startKey] == null || u[spec.endKey] == null) { onDone(); return; }
+  // Жёстко глушим оба потока перед стартом — исключает наложение звука.
+  zhAudio.pause();
+  ruAudio.pause();
+  mode = spec.mode;
+  sentenceText.textContent = u[spec.textKey] || '';
+  sentenceText.className = spec.cls;
+  statusLine.textContent = spec.statusText;
+  spec.audio.playbackRate = spec.rate;
+  spec.audio.currentTime = u[spec.startKey];
+  spec.audio.play().catch(()=>{ showFileWarning(); });
+  startWaveAnim(spec.mode);
+
+  autoTranslateHandler = () => {
+    if (spec.audio.currentTime >= u[spec.endKey] - 0.02) {
+      spec.audio.pause();
+      spec.audio.removeEventListener('timeupdate', autoTranslateHandler);
+      autoTranslateHandler = null;
+      onDone();
+    }
+  };
+  spec.audio.addEventListener('timeupdate', autoTranslateHandler);
+}
+
+// Возобновляет цикл той же фразы (тот же idx) на loop-языке, не сбрасывая
+// repeatCompleted — используется после автоматической вставки перевода.
+function resumeLoopSentence(spec, u){
+  // Жёстко глушим оба потока перед стартом — исключает наложение звука.
+  zhAudio.pause();
+  ruAudio.pause();
+  mode = spec.mode;
+  paused = false;
+  setPauseUI();
+  sentenceText.textContent = u[spec.textKey];
+  sentenceText.className = spec.cls;
+  statusLine.textContent = 'Играет по кругу — нажмите «ДАЛЬШЕ», когда разберёте фразу';
+  spec.audio.currentTime = u[spec.startKey];
+  spec.audio.play().then(()=> startWaveAnim(spec.mode)).catch(()=>{});
+}
+
 function playZhLoop(){
   clearHandlers();
-  mode = 'zh';
+  const spec = loopSpec();
+  const other = onceSpec();
+  mode = spec.mode;
   paused = false;
   setPauseUI();
   const u = UNITS[idx];
   repeatCompleted = 0;
-  sentenceText.textContent = u.zhText;
-  sentenceText.className = 'sentence';
+  sentenceText.textContent = u[spec.textKey];
+  sentenceText.className = spec.cls;
   statusLine.textContent = 'Играет по кругу — нажмите «ДАЛЬШЕ», когда разберёте фразу';
-  translateBtn.disabled = (u.ruStart === null);
+  translateBtn.disabled = (u[other.startKey] == null);
   zhAudio.pause();
   ruAudio.pause();
-  zhAudio.playbackRate = parseFloat(speedSelect.value);
-  zhAudio.currentTime = u.zhStart;
-  zhAudio.play().then(()=> startWaveAnim('zh')).catch(err=>{
+  spec.audio.playbackRate = spec.rate;
+  spec.audio.currentTime = u[spec.startKey];
+  spec.audio.play().then(()=> startWaveAnim(spec.mode)).catch(err=>{
     if(err && err.name !== 'NotAllowedError') showFileWarning();
   });
 
   zhLoopHandler = () => {
-    if(zhAudio.currentTime >= u.zhEnd - 0.02){
+    if(spec.audio.currentTime >= u[spec.endKey] - 0.02){
       const target = repeatSelect.value === 'Infinity' ? Infinity : Number(repeatSelect.value);
-      if (repeatCompleted + 1 >= target) {
+      repeatCompleted++;
+      const reachedTarget = repeatCompleted >= target;
+      const autoN = getInvertEveryN();
+      const triggerAuto = autoN && (repeatCompleted % autoN === 0);
+
+      if (triggerAuto) {
+        spec.audio.pause();
+        stopWaveAnim();
+        playAutoTranslationOnce(u, () => {
+          if (reachedTarget) {
+            if (idx < UNITS.length - 1) {
+              goTo(idx + 1);
+            } else {
+              paused = true;
+              stopWaveAnim();
+              playBoundarySound('end');
+              statusLine.textContent = 'Глава завершена';
+              setPauseUI();
+            }
+          } else {
+            resumeLoopSentence(spec, u);
+          }
+        });
+        return;
+      }
+
+      if (reachedTarget) {
         if (idx < UNITS.length - 1) {
           goTo(idx + 1);
         } else {
-          zhAudio.pause();
+          spec.audio.pause();
           paused = true;
           stopWaveAnim();
           playBoundarySound('end');
@@ -897,40 +1085,42 @@ function playZhLoop(){
         }
         return;
       }
-      repeatCompleted++;
-      zhAudio.currentTime = u.zhStart;
-      if(!paused) zhAudio.play().catch(()=>{});
+      spec.audio.currentTime = u[spec.startKey];
+      if(!paused) spec.audio.play().catch(()=>{});
     }
   };
-  zhAudio.addEventListener('timeupdate', zhLoopHandler);
+  spec.audio.addEventListener('timeupdate', zhLoopHandler);
 }
 
 function playTranslationOnce(){
   const u = UNITS[idx];
+  const spec = onceSpec();
   // Новые соответствия китайской и русской озвучки будут добавлены отдельно.
-  if(u.ruStart == null || u.ruEnd == null) return;
+  if(u[spec.startKey] == null || u[spec.endKey] == null) return;
   clearHandlers();
-  mode = 'ru';
+  mode = spec.mode;
   paused = false;
   setPauseUI();
-  sentenceText.textContent = u.ruText || '';
-  sentenceText.className = 'sentence ru-mode';
-  statusLine.textContent = 'Слушаем перевод один раз, затем снова китайский';
+  sentenceText.textContent = u[spec.textKey] || '';
+  sentenceText.className = spec.cls;
+  statusLine.textContent = spec.statusText;
   zhAudio.pause();
-  ruAudio.playbackRate = 1;
-  ruAudio.currentTime = u.ruStart;
-  ruAudio.play().catch(()=>{ showFileWarning(); });
-  startWaveAnim('ru');
+  ruAudio.pause();
+  spec.audio.playbackRate = spec.rate;
+  spec.audio.currentTime = u[spec.startKey];
+  spec.audio.play().catch(()=>{ showFileWarning(); });
+  startWaveAnim(spec.mode);
 
   ruEndHandler = () => {
-    if(ruAudio.currentTime >= u.ruEnd - 0.02){
-      ruAudio.pause();
+    if(spec.audio.currentTime >= u[spec.endKey] - 0.02){
+      spec.audio.pause();
       clearHandlers();
       playZhLoop();
     }
   };
-  ruAudio.addEventListener('timeupdate', ruEndHandler);
+  spec.audio.addEventListener('timeupdate', ruEndHandler);
 }
+
 
 function togglePause(){
   const activeAudio = (mode==='zh') ? zhAudio : ruAudio;
@@ -1004,6 +1194,16 @@ volumeSlider.addEventListener('input', ()=>{
   saveState();
 });
 pauseBtn.addEventListener('click', togglePause);
+invertBtn.addEventListener('click', ()=>{
+  inverted = !inverted;
+  invertBtn.classList.toggle('active', inverted);
+  invertBtn.textContent = inverted ? 'Инверсия ✓' : 'Инверсия';
+  invertRepeatSelect.disabled = !inverted;
+  invertRepeatSelect.classList.toggle('active', inverted);
+  saveState();
+  playZhLoop();
+});
+invertRepeatSelect.addEventListener('change', saveState);
 bookmarkBtn.addEventListener('click', toggleBookmark);
 bookmarksBtn.addEventListener('click', ()=> bookmarkList.classList.toggle('open'));
 
@@ -1011,7 +1211,7 @@ speedSelect.addEventListener('change', ()=>{
   if(mode==='zh') zhAudio.playbackRate = parseFloat(speedSelect.value);
   saveState();
 });
-repeatSelect.addEventListener('change', saveState);
+repeatSelect.addEventListener('change', ()=>{ updateInvertRepeatOptions(); saveState(); });
 
 document.addEventListener('keydown', (e)=>{
   if(['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
@@ -1032,6 +1232,9 @@ updateProgress();
 volumeSlider.dispatchEvent(new Event('input'));
 renderBookmarks();
 updateBookmarkButton();
+updateInvertRepeatOptions();
+invertRepeatSelect.disabled = !inverted;
+if(inverted){ invertBtn.classList.add('active'); invertBtn.textContent = 'Инверсия ✓'; invertRepeatSelect.classList.add('active'); }
 playZhLoop();
 
 // ========================================
